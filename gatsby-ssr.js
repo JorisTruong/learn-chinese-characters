@@ -1,3 +1,3 @@
-import wrapWithProvider from "./redux/reduxWrapper.js"
+import wrapWithProvider from "./src/redux/reduxWrapper.js"
 
 export const wrapRootElement = wrapWithProvider
