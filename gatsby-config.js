@@ -1,4 +1,9 @@
 module.exports = {
+  siteMetadata: {
+    title: "Learn Chinese Characters",
+    author: "Joris Truong",
+    description: "Learn Chinese Characters"
+  },
   plugins: [
     "gatsby-plugin-postcss",
     "gatsby-plugin-image",
@@ -13,5 +18,6 @@ module.exports = {
       },
       __key: "images",
     },
+    "gatsby-plugin-antd",
   ],
 };
