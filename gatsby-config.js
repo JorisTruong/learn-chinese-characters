@@ -18,6 +18,13 @@ module.exports = {
       },
       __key: "images",
     },
+    {
+      resolve: `gatsby-plugin-manifest`,
+      options: {
+        start_url: '/',
+        icon: 'src/images/logo.svg',
+      },
+    },
     "gatsby-plugin-antd",
   ],
 };
