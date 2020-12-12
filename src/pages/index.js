@@ -29,8 +29,22 @@ const pronunciations = {
 }
 
 const IndexPage = () => {
-  const [leftCollapsed, setLeftCollapse] = useState(false);
-  const [rightCollapsed, setRightCollapse] = useState(false);
+  const [leftCollapsed, setLeftCollapse] = useState(window.innerWidth < window.innerHeight ? true : false);
+  const [rightCollapsed, setRightCollapse] = useState(window.innerWidth < window.innerHeight ? true : false);
+
+  const toggleLeftCollapse = () => {
+    if (window.innerWidth < window.innerHeight && !rightCollapsed) {
+      setRightCollapse(true);
+    }
+    setLeftCollapse(!leftCollapsed);
+  }
+
+  const toggleRightCollapse = () => {
+    if (window.innerWidth < window.innerHeight && !leftCollapsed) {
+      setLeftCollapse(true);
+    }
+    setRightCollapse(!rightCollapsed);
+  }
 
   return (
     <div>
@@ -39,10 +53,13 @@ const IndexPage = () => {
       </Helmet>
       <Layout>
         <Sider
-          collapsible collapsed={leftCollapsed} onCollapse={() => setLeftCollapse(!leftCollapsed)}
+          collapsible collapsed={leftCollapsed} onCollapse={toggleLeftCollapse}
+          collapsedWidth={window.innerWidth < window.innerHeight && leftCollapsed ? "0" : Sider.defaultProps}
+          zeroWidthTriggerStyle={{position: "fixed", left: 0, right: "auto", bottom: 0, top: "auto"}}
           style={{
-            height: '100vh',
-            left: 0,
+            height: "100vh",
+            position: "fixed",
+            left: 0
           }}
         >
           <div className="logo" />
@@ -58,22 +75,25 @@ const IndexPage = () => {
           </Menu>
         </Sider>
         <Layout className="site-layout">
-          <Header className="site-layout-background" style={{ padding: 0, textAlign: 'center' }}>
+          <Header className="site-layout-background" style={{ padding: 0, textAlign: "center" }}>
             Learn Chinese Characters
           </Header>
-          <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
-            <div className="site-layout-background" style={{ padding: 24, textAlign: 'center' }}>
+          <Content style={{ margin: "24px 16px 0", overflow: "initial" }}>
+            <div className="site-layout-background" style={{ padding: 24, textAlign: "center" }}>
               content
             </div>
           </Content>
-          <Footer style={{ textAlign: 'center' }}>Joris Truong</Footer>
+          <Footer style={{ textAlign: "center" }}>Joris Truong</Footer>
         </Layout>
         <Sider
-          collapsible collapsed={rightCollapsed} onCollapse={() => setRightCollapse(!rightCollapsed)}
+          collapsible collapsed={rightCollapsed} onCollapse={toggleRightCollapse}
+          collapsedWidth={window.innerWidth < window.innerHeight && rightCollapsed ? "0" : Sider.defaultProps}
+          zeroWidthTriggerStyle={{position: "fixed", right: 0, left: "auto", bottom: 0, top: "auto"}}
           reverseArrow
           style={{
-            height: '100vh',
-            left: 0,
+            height: "100vh",
+            position: "fixed",
+            right: 0
           }}
         >
           <div className="logo" />
