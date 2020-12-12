@@ -1,14 +1,9 @@
-import React, { useState } from "react"
+import React, { useState, useRef, useEffect } from "react"
 import Helmet from "react-helmet"
-import { Layout, Menu, Icon } from "antd"
+import { Layout, Menu, Button } from "antd"
 
-import one from "../images/1.svg"
-import two from "../images/2.svg"
-import three from "../images/3.svg"
-import four from "../images/4.svg"
-import five from "../images/5.svg"
-import six from "../images/6.svg"
-import seven from "../images/7.svg"
+
+const HanziWriter = require("hanzi-writer");
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
@@ -29,6 +24,17 @@ const pronunciations = {
 }
 
 const IndexPage = () => {
+  const divRef = useRef();
+  var character = null;
+  useEffect(() => {
+    character = HanziWriter.create(divRef.current, '我', {
+      width: 200,
+      height: 200,
+      padding: 5,
+      showOutline: true
+    })
+  })
+
   const [leftCollapsed, setLeftCollapse] = useState(window.innerWidth < window.innerHeight ? true : false);
   const [rightCollapsed, setRightCollapse] = useState(window.innerWidth < window.innerHeight ? true : false);
 
@@ -80,7 +86,19 @@ const IndexPage = () => {
           </Header>
           <Content style={{ margin: "24px 16px 0", overflow: "initial" }}>
             <div className="site-layout-background" style={{ padding: 24, textAlign: "center" }}>
-              content
+              <div>
+                <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" ref={divRef}>
+                  <line x1="0" y1="0" x2="200" y2="200" stroke="#DDD" />
+                  <line x1="200" y1="0" x2="0" y2="200" stroke="#DDD" />
+                  <line x1="100" y1="0" x2="100" y2="200" stroke="#DDD" />
+                  <line x1="0" y1="100" x2="200" y2="100" stroke="#DDD" />
+                  <line x1="0" y1="0" x2="200" y2="0" stroke="#555" />
+                  <line x1="0" y1="0" x2="0" y2="200" stroke="#555" />
+                  <line x1="200" y1="200" x2="0" y2="200" stroke="#555" />
+                  <line x1="200" y1="200" x2="200" y2="0" stroke="#555" />
+                </svg>
+              </div>
+              <Button type="primary" onClick={() => character.animateCharacter()}>Animate</Button>
             </div>
           </Content>
           <Footer style={{ textAlign: "center" }}>Joris Truong</Footer>
