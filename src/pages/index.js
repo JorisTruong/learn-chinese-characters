@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react"
 import Helmet from "react-helmet"
-import { Layout, Menu, Button, Input, Slider, InputNumber, Switch, Row, Col } from "antd"
+import { Layout, Menu, Button, Input, Slider, InputNumber, Row, Col } from "antd"
 
 
 const HanziWriter = require("hanzi-writer");
@@ -36,7 +36,6 @@ const IndexPage = () => {
   const [leftCollapsed, setLeftCollapse] = useState(window.innerWidth < window.innerHeight ? true : false);
   const [rightCollapsed, setRightCollapse] = useState(window.innerWidth < window.innerHeight ? true : false);
   const [animationSpeed, setAnimationSpeed] = useState(1);
-  const [system, setSystem] = useState(true);
 
   const toggleLeftCollapse = () => {
     if (window.innerWidth < window.innerHeight && !rightCollapsed) {
@@ -100,14 +99,7 @@ const IndexPage = () => {
             zIndex: 999
           }}
         >
-          { leftCollapsed ? null : <div>
-            <Row justify="center" style={{ margin: 25 }}>
-              <Col>
-                <Switch checkedChildren="Traditional" unCheckedChildren="Simplified" defaultChecked style={{ backgroundColor: "#1890ff" }} checked={system} onChange={() => setSystem(!system)} />
-              </Col>
-            </Row>
-          </div>}
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
+          <Menu theme="dark" mode="inline" defaultSelectedKeys={[]}>
             {
               strokes.map((item) => {
                 return(
