@@ -9,15 +9,7 @@ const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
 const { Search } = Input;
 
-const strokes = {
-  "1 - 10 strokes": [],
-  "11 - 20 strokes": [],
-  "21 - 30 strokes": [],
-  "31 - 40 strokes": [],
-  "41 - 50 strokes": [],
-  "50 - 60 strokes": [],
-  "61+ strokes": []
-}
+const strokes = require("../resources/hanzi.json");
 
 const pronunciations = {
   "Mandarin": {},
@@ -45,12 +37,6 @@ const IndexPage = () => {
   const [rightCollapsed, setRightCollapse] = useState(window.innerWidth < window.innerHeight ? true : false);
   const [animationSpeed, setAnimationSpeed] = useState(1);
   const [system, setSystem] = useState(true);
-
-  const setHanzi = (value) => {
-    if (value !== '') {
-      hanzi.setCharacter(value);
-    }
-  }
 
   const toggleLeftCollapse = () => {
     if (window.innerWidth < window.innerHeight && !rightCollapsed) {
@@ -90,6 +76,12 @@ const IndexPage = () => {
     }
   }
 
+  const setHanzi = (value) => {
+    if (value !== '') {
+      hanzi.setCharacter(value);
+    }
+  }
+
   return (
     <div>
       <Helmet title="Learn Chinese Characters">
@@ -108,18 +100,27 @@ const IndexPage = () => {
             zIndex: 999
           }}
         >
-          <div>
+          { leftCollapsed ? null : <div>
             <Row justify="center" style={{ margin: 25 }}>
               <Col>
                 <Switch checkedChildren="Traditional" unCheckedChildren="Simplified" defaultChecked style={{ backgroundColor: "#1890ff" }} checked={system} onChange={() => setSystem(!system)} />
               </Col>
             </Row>
-          </div>
+          </div>}
           <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
             {
-              Object.keys(strokes).map((key, value) => {
+              strokes.map((item) => {
                 return(
-                  <SubMenu key={key} title={key}>
+                  <SubMenu key={item["name"]} title={item["name"]}>
+                    {
+                      item["characters"].map((c) => {
+                        return(
+                          <Menu.Item key={c["character"]} onClick={() => setHanzi(c["character"])}>
+                            {c["character"]}
+                          </Menu.Item>
+                        )
+                      })
+                    }
                   </SubMenu>
                 )
               })
