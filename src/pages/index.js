@@ -93,7 +93,7 @@ const IndexPage = () => {
           zeroWidthTriggerStyle={{position: "fixed", left: 0, right: "auto", bottom: 0, top: "auto"}}
           style={{
             overflow: "auto",
-            height: "100vh",
+            height: "calc(100vh - 48px)",
             position: "fixed",
             left: 0,
             zIndex: 999
@@ -103,7 +103,7 @@ const IndexPage = () => {
             {
               strokes.map((item) => {
                 return(
-                  <SubMenu key={item["name"]} title={item["name"]}>
+                  <SubMenu key={item["name"]} title={item["name"] + " strokes"}>
                     {
                       item["characters"].map((c) => {
                         return(
@@ -152,7 +152,7 @@ const IndexPage = () => {
                     />
                     Animation Speed
                   </Col>
-                  <Col span={1} md={{ span: 3 }} xs={{ span: 5 }}>
+                  <Col lg={{ span: 1 }} md={{ span: 3 }} xs={{ span: 5 }}>
                     <InputNumber
                       min={1}
                       max={5}
@@ -181,7 +181,7 @@ const IndexPage = () => {
           reverseArrow
           style={{
             overflow: "auto",
-            height: "100vh",
+            height: "calc(100vh - 48px)",
             position: "fixed",
             right: 0,
             zIndex: 999
