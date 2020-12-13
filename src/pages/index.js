@@ -12,8 +12,8 @@ const { Search } = Input;
 const strokes = require("../resources/hanzi.json");
 
 const pronunciations = {
-  "Mandarin": {},
-  "Cantonese": {}
+  "Definition": {},
+  "Mandarin": {}
 }
 
 var hanzi = null;
@@ -107,7 +107,7 @@ const IndexPage = () => {
                     {
                       item["characters"].map((c) => {
                         return(
-                          <Menu.Item key={c["character"]} onClick={() => setHanzi(c["character"])}>
+                          <Menu.Item key={c["character"]} onClick={() => setHanzi(c["character"])} style={{ fontSize: 20 }}>
                             {c["character"]}
                           </Menu.Item>
                         )
