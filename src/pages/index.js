@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react"
 import Helmet from "react-helmet"
-import { Layout, Menu, Button, Input, Slider, InputNumber, Row, Col } from "antd"
+import { Layout, Menu, Button, Input, Slider, InputNumber, Switch, Row, Col } from "antd"
 
 
 const HanziWriter = require("hanzi-writer");
@@ -44,9 +44,10 @@ const IndexPage = () => {
   const [leftCollapsed, setLeftCollapse] = useState(window.innerWidth < window.innerHeight ? true : false);
   const [rightCollapsed, setRightCollapse] = useState(window.innerWidth < window.innerHeight ? true : false);
   const [animationSpeed, setAnimationSpeed] = useState(1);
+  const [system, setSystem] = useState(true);
 
   const setHanzi = (value) => {
-    if (value != '') {
+    if (value !== '') {
       hanzi.setCharacter(value);
     }
   }
@@ -67,23 +68,23 @@ const IndexPage = () => {
 
   const setSpeedLevel = (value) => {
     setAnimationSpeed(value);
-    if (value == 1) {
+    if (value === 1) {
       hanzi._options.delayBetweenStrokes = 1000;
       hanzi._options.strokeAnimationSpeed = 1;
     }
-    if (value == 2) {
+    if (value === 2) {
       hanzi._options.delayBetweenStrokes = 500;
       hanzi._options.strokeAnimationSpeed = 2;
     }
-    if (value == 3) {
+    if (value === 3) {
       hanzi._options.delayBetweenStrokes = 250;
       hanzi._options.strokeAnimationSpeed = 3;
     }
-    if (value == 4) {
+    if (value === 4) {
       hanzi._options.delayBetweenStrokes = 100;
       hanzi._options.strokeAnimationSpeed = 4;
     }
-    if (value == 5) {
+    if (value === 5) {
       hanzi._options.delayBetweenStrokes = 1;
       hanzi._options.strokeAnimationSpeed = 5;
     }
@@ -107,7 +108,13 @@ const IndexPage = () => {
             zIndex: 999
           }}
         >
-          <div className="logo" />
+          <div>
+            <Row justify="center" style={{ margin: 25 }}>
+              <Col>
+                <Switch checkedChildren="Traditional" unCheckedChildren="Simplified" defaultChecked style={{ backgroundColor: "#1890ff" }} checked={system} onChange={() => setSystem(!system)} />
+              </Col>
+            </Row>
+          </div>
           <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
             {
               Object.keys(strokes).map((key, value) => {
@@ -148,7 +155,7 @@ const IndexPage = () => {
                       min={0}
                       max={5}
                       value={animationSpeed}
-                      onChange={(value) => value == 0 ? setSpeedLevel(1) : setSpeedLevel(value)}
+                      onChange={(value) => value === 0 ? setSpeedLevel(1) : setSpeedLevel(value)}
                     />
                     Animation Speed
                   </Col>
