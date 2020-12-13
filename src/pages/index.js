@@ -100,9 +100,11 @@ const IndexPage = () => {
           collapsedWidth={window.innerWidth < window.innerHeight && leftCollapsed ? "0" : Sider.defaultProps}
           zeroWidthTriggerStyle={{position: "fixed", left: 0, right: "auto", bottom: 0, top: "auto"}}
           style={{
+            overflow: "auto",
             height: "100vh",
             position: "fixed",
-            left: 0
+            left: 0,
+            zIndex: 999
           }}
         >
           <div className="logo" />
@@ -138,10 +140,10 @@ const IndexPage = () => {
               </div>
               <div style={{ padding: 10 }}>
                 <Row gutter={16} align="middle">
-                  <Col span={2} offset={9}>
+                  <Col lg={{ span: 2, offset: 9 }} md={{ span: 6, offset: 4 }} xs={{ span: 9 }}>
                     <Button type="primary" onClick={() => hanzi.animateCharacter()} style={{ width: "100%" }}>Animate</Button>
                   </Col>
-                  <Col span={3}>
+                  <Col lg={{ span: 3 }} md={{ span: 6}} xs={{ span: 10 }}>
                     <Slider
                       min={0}
                       max={5}
@@ -150,7 +152,7 @@ const IndexPage = () => {
                     />
                     Animation Speed
                   </Col>
-                  <Col span={1}>
+                  <Col span={1} md={{ span: 3 }} xs={{ span: 5 }}>
                     <InputNumber
                       min={1}
                       max={5}
@@ -163,7 +165,7 @@ const IndexPage = () => {
               </div>
               <div style={{ padding: 10 }}>
                 <Row gutter={16}>
-                  <Col span={4} offset={10}>
+                  <Col lg={{ span: 4, offset: 10 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }}>
                     <Button type="primary" onClick={() => hanzi.quiz()} style={{ width: "100%" }}>Quiz</Button>
                   </Col>
                 </Row>
@@ -178,9 +180,11 @@ const IndexPage = () => {
           zeroWidthTriggerStyle={{position: "fixed", right: 0, left: "auto", bottom: 0, top: "auto"}}
           reverseArrow
           style={{
+            overflow: "auto",
             height: "100vh",
             position: "fixed",
-            right: 0
+            right: 0,
+            zIndex: 999
           }}
         >
           <div className="logo" />
