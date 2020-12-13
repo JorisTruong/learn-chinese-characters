@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react"
 import Helmet from "react-helmet"
-import { Layout, Menu, Button, Input } from "antd"
+import { Layout, Menu, Button, Input, Slider, InputNumber, Row, Col } from "antd"
 
 
 const HanziWriter = require("hanzi-writer");
@@ -24,24 +24,31 @@ const pronunciations = {
   "Cantonese": {}
 }
 
+var hanzi = null;
+
 const IndexPage = () => {  
   const divRef = useRef();
-  var hanzi = null;
   useEffect(() => {
-    hanzi = HanziWriter.create(divRef.current, character, {
-      width: 200,
-      height: 200,
-      padding: 5,
-      showOutline: true
-    })
+    if (hanzi == null) {
+      hanzi = HanziWriter.create(divRef.current, '學', {
+        width: 200,
+        height: 200,
+        padding: 5,
+        showOutline: true,
+        delayBetweenStrokes: 1000,
+        strokeAnimationSpeed: 1
+      })
+    }
   })
 
   const [leftCollapsed, setLeftCollapse] = useState(window.innerWidth < window.innerHeight ? true : false);
   const [rightCollapsed, setRightCollapse] = useState(window.innerWidth < window.innerHeight ? true : false);
-  const [character, setCharacter] = useState('學');
+  const [animationSpeed, setAnimationSpeed] = useState(1);
 
   const setHanzi = (value) => {
-    hanzi.setCharacter(value)
+    if (value != '') {
+      hanzi.setCharacter(value);
+    }
   }
 
   const toggleLeftCollapse = () => {
@@ -56,6 +63,30 @@ const IndexPage = () => {
       setLeftCollapse(true);
     }
     setRightCollapse(!rightCollapsed);
+  }
+
+  const setSpeedLevel = (value) => {
+    setAnimationSpeed(value);
+    if (value == 1) {
+      hanzi._options.delayBetweenStrokes = 1000;
+      hanzi._options.strokeAnimationSpeed = 1;
+    }
+    if (value == 2) {
+      hanzi._options.delayBetweenStrokes = 500;
+      hanzi._options.strokeAnimationSpeed = 2;
+    }
+    if (value == 3) {
+      hanzi._options.delayBetweenStrokes = 250;
+      hanzi._options.strokeAnimationSpeed = 3;
+    }
+    if (value == 4) {
+      hanzi._options.delayBetweenStrokes = 100;
+      hanzi._options.strokeAnimationSpeed = 4;
+    }
+    if (value == 5) {
+      hanzi._options.delayBetweenStrokes = 1;
+      hanzi._options.strokeAnimationSpeed = 5;
+    }
   }
 
   return (
@@ -105,7 +136,38 @@ const IndexPage = () => {
                   <line x1="200" y1="200" x2="200" y2="0" stroke="#555" />
                 </svg>
               </div>
-              <Button type="primary" onClick={() => hanzi.animateCharacter()}>Animate</Button>
+              <div style={{ padding: 10 }}>
+                <Row gutter={16} align="middle">
+                  <Col span={2} offset={9}>
+                    <Button type="primary" onClick={() => hanzi.animateCharacter()} style={{ width: "100%" }}>Animate</Button>
+                  </Col>
+                  <Col span={3}>
+                    <Slider
+                      min={0}
+                      max={5}
+                      value={animationSpeed}
+                      onChange={(value) => value == 0 ? setSpeedLevel(1) : setSpeedLevel(value)}
+                    />
+                    Animation Speed
+                  </Col>
+                  <Col span={1}>
+                    <InputNumber
+                      min={1}
+                      max={5}
+                      style={{ width: "100%" }}
+                      value={animationSpeed}
+                      onChange={(value) => setSpeedLevel(value)}
+                    />
+                  </Col>
+                </Row>
+              </div>
+              <div style={{ padding: 10 }}>
+                <Row gutter={16}>
+                  <Col span={4} offset={10}>
+                    <Button type="primary" onClick={() => hanzi.quiz()} style={{ width: "100%" }}>Quiz</Button>
+                  </Col>
+                </Row>
+              </div>
             </div>
           </Content>
           <Footer style={{ textAlign: "center" }}>Joris Truong</Footer>
