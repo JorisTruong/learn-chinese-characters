@@ -1,12 +1,13 @@
 import React, { useState, useRef, useEffect } from "react"
 import Helmet from "react-helmet"
-import { Layout, Menu, Button } from "antd"
+import { Layout, Menu, Button, Input } from "antd"
 
 
 const HanziWriter = require("hanzi-writer");
 
 const { Header, Content, Footer, Sider } = Layout;
 const { SubMenu } = Menu;
+const { Search } = Input;
 
 const strokes = {
   "1 - 10 strokes": [],
@@ -23,11 +24,11 @@ const pronunciations = {
   "Cantonese": {}
 }
 
-const IndexPage = () => {
+const IndexPage = () => {  
   const divRef = useRef();
-  var character = null;
+  var hanzi = null;
   useEffect(() => {
-    character = HanziWriter.create(divRef.current, '我', {
+    hanzi = HanziWriter.create(divRef.current, character, {
       width: 200,
       height: 200,
       padding: 5,
@@ -37,6 +38,11 @@ const IndexPage = () => {
 
   const [leftCollapsed, setLeftCollapse] = useState(window.innerWidth < window.innerHeight ? true : false);
   const [rightCollapsed, setRightCollapse] = useState(window.innerWidth < window.innerHeight ? true : false);
+  const [character, setCharacter] = useState('學');
+
+  const setHanzi = (value) => {
+    hanzi.setCharacter(value)
+  }
 
   const toggleLeftCollapse = () => {
     if (window.innerWidth < window.innerHeight && !rightCollapsed) {
@@ -86,7 +92,8 @@ const IndexPage = () => {
           </Header>
           <Content style={{ margin: "24px 16px 0", overflow: "initial" }}>
             <div className="site-layout-background" style={{ padding: 24, textAlign: "center" }}>
-              <div>
+              <Search placeholder="Input Chinese Character" enterButton={"OK"} style={{ width: window.innerWidth < window.innerHeight ? "75vw" : "20vw" }} onSearch={(value) => setHanzi(value)} />
+              <div style={{ padding: 50}} >
                 <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" ref={divRef}>
                   <line x1="0" y1="0" x2="200" y2="200" stroke="#DDD" />
                   <line x1="200" y1="0" x2="0" y2="200" stroke="#DDD" />
@@ -98,7 +105,7 @@ const IndexPage = () => {
                   <line x1="200" y1="200" x2="200" y2="0" stroke="#555" />
                 </svg>
               </div>
-              <Button type="primary" onClick={() => character.animateCharacter()}>Animate</Button>
+              <Button type="primary" onClick={() => hanzi.animateCharacter()}>Animate</Button>
             </div>
           </Content>
           <Footer style={{ textAlign: "center" }}>Joris Truong</Footer>
