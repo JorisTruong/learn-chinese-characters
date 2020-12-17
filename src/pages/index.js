@@ -1,23 +1,25 @@
 import React, { useState, useRef, useEffect } from "react"
 import Helmet from "react-helmet"
-import { Layout, Menu, Button, Input, Slider, InputNumber, Row, Col } from "antd"
+import { Layout, Menu, Button, Input, Slider, InputNumber, Modal, Row, Col } from "antd"
+import { AutoSizer, Collection } from "react-virtualized"
 
+const HanziWriter = require("hanzi-writer")
 
-const HanziWriter = require("hanzi-writer");
+const hanziData = require("../resources/hanzi.json")
 
-const { Header, Content, Footer, Sider } = Layout;
-const { SubMenu } = Menu;
-const { Search } = Input;
+const { Header, Content, Footer, Sider } = Layout
+const { SubMenu } = Menu
+const { Search } = Input
 
 const pronunciations = {
   "Definition": {},
   "Mandarin": {}
 }
 
-var hanzi = null;
+var hanzi = null
 
 const IndexPage = () => {  
-  const divRef = useRef();
+  const divRef = useRef()
   useEffect(() => {
     if (hanzi == null) {
       hanzi = HanziWriter.create(divRef.current, '學', {
@@ -31,36 +33,68 @@ const IndexPage = () => {
     }
   })
 
-  const [rightCollapsed, setRightCollapse] = useState(window.innerWidth < window.innerHeight ? true : false);
-  const [animationSpeed, setAnimationSpeed] = useState(1);
+  const [rightCollapsed, setRightCollapse] = useState(window.innerWidth < window.innerHeight ? true : false)
+  const [animationSpeed, setAnimationSpeed] = useState(1)
+  const [isModalVisible, setIsModalVisible] = useState(false)
 
   const setSpeedLevel = (value) => {
-    setAnimationSpeed(value);
+    setAnimationSpeed(value)
     if (value === 1) {
-      hanzi._options.delayBetweenStrokes = 1000;
-      hanzi._options.strokeAnimationSpeed = 1;
+      hanzi._options.delayBetweenStrokes = 1000
+      hanzi._options.strokeAnimationSpeed = 1
     }
     if (value === 2) {
-      hanzi._options.delayBetweenStrokes = 500;
-      hanzi._options.strokeAnimationSpeed = 2;
+      hanzi._options.delayBetweenStrokes = 500
+      hanzi._options.strokeAnimationSpeed = 2
     }
     if (value === 3) {
-      hanzi._options.delayBetweenStrokes = 250;
-      hanzi._options.strokeAnimationSpeed = 3;
+      hanzi._options.delayBetweenStrokes = 250
+      hanzi._options.strokeAnimationSpeed = 3
     }
     if (value === 4) {
-      hanzi._options.delayBetweenStrokes = 100;
-      hanzi._options.strokeAnimationSpeed = 4;
+      hanzi._options.delayBetweenStrokes = 100
+      hanzi._options.strokeAnimationSpeed = 4
     }
     if (value === 5) {
-      hanzi._options.delayBetweenStrokes = 1;
-      hanzi._options.strokeAnimationSpeed = 5;
+      hanzi._options.delayBetweenStrokes = 1
+      hanzi._options.strokeAnimationSpeed = 5
     }
   }
 
   const setHanzi = (value) => {
     if (value !== '') {
-      hanzi.setCharacter(value);
+      hanzi.setCharacter(value)
+    }
+  }
+
+  const cellRenderer = ({ index, key, style }) => {
+    style.fontSize = 20
+    style.borderRadius = "10px"
+    style.display = "flex"
+    style.justifyContent = "center"
+    style.alignItems = "center"
+    return (
+      <Button key={key} style={style} onClick={() => {setIsModalVisible(false); setHanzi(hanziData[index].character)}}>
+        {hanziData[index].character}
+      </Button>
+    );
+  }
+  
+  const cellSizeAndPositionGetter = ({ index }) => {
+    if (window.innerWidth > window.innerHeight) {
+      return {
+        height: window.innerHeight * 0.08,
+        width: window.innerWidth * 0.08,
+        x: (window.innerWidth * 0.1 - 6) * (index % 8),
+        y: window.innerHeight * 0.1 * Math.floor(index / 8)
+      }
+    } else {
+      return {
+        height: window.innerHeight * 0.1,
+        width: window.innerWidth * 0.1,
+        x: (window.innerWidth * 0.13 - 6) * (index % 6),
+        y: window.innerHeight * 0.13 * Math.floor(index / 6)
+      }
     }
   }
 
@@ -77,7 +111,25 @@ const IndexPage = () => {
           <Content style={{ margin: "24px 16px 0", overflow: "initial" }}>
             <div className="site-layout-background" style={{ padding: 24, textAlign: "center" }}>
               <Search placeholder="Input Chinese Character" enterButton={"OK"} style={{ width: window.innerWidth < window.innerHeight ? "75vw" : "20vw" }} onSearch={(value) => setHanzi(value)} />
-              <div style={{ padding: 50}} >
+              <Row gutter={16} style={{ padding: 15 }}>
+                <Col lg={{ span: 4, offset: 10 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }}>
+                  <Button type="primary" onClick={() => setIsModalVisible(true)}>Browse all characters</Button>
+                </Col>
+              </Row>
+              <Modal title="All Chinese characters" visible={isModalVisible} footer={null} onCancel={() => setIsModalVisible(false)} width={window.innerWidth * 0.8} bodyStyle={{ height: window.innerHeight * 0.5, overflow: "auto" }}>
+              <AutoSizer>
+                {({ height, width }) => (
+                  <Collection
+                    cellCount={hanziData.length}
+                    cellRenderer={cellRenderer}
+                    cellSizeAndPositionGetter={cellSizeAndPositionGetter}
+                    height={height}
+                    width={width}
+                  />
+                )}
+              </AutoSizer>
+              </Modal>
+              <div style={{ padding: 25}} >
                 <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" ref={divRef}>
                   <line x1="0" y1="0" x2="200" y2="200" stroke="#DDD" />
                   <line x1="200" y1="0" x2="0" y2="200" stroke="#DDD" />
