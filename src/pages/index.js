@@ -189,15 +189,15 @@ const IndexPage = () => {
           <Content style={{ margin: "24px 16px 0", overflow: "initial" }}>
             <div className="site-layout-background" style={{ padding: 24, textAlign: "center" }}>
               <AutoComplete
-                dropdownMatchSelectWidth={252}
+                dropdownMatchSelectWidth={window.innerWidth < window.innerHeight ? "75vw" : "20vw"}
                 style={{
-                  width: 300,
+                  width: window.innerWidth < window.innerHeight ? "75vw" : "20vw",
                 }}
                 options={suggestions}
                 onSearch={handleSearch}
                 onSelect={(value) => setHanzi(value)}
               >
-                <Search placeholder="Input Chinese Character" enterButton={"OK"} style={{ width: window.innerWidth < window.innerHeight ? "75vw" : "20vw" }} onSearch={(value) => setHanzi(value)} />
+                <Search placeholder="Search a Chinese Character" enterButton={"OK"} style={{ width: window.innerWidth < window.innerHeight ? "75vw" : "20vw" }} onSearch={(value) => setHanzi(value)} />
               </AutoComplete>
               <Row gutter={16} style={{ padding: 15 }}>
                 <Col lg={{ span: 4, offset: 10 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }}>
