@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react"
 import Helmet from "react-helmet"
 import { Layout, Menu, Button, Input, Slider, InputNumber, Modal, Row, Col } from "antd"
+import { HomeOutlined, HighlightOutlined, RocketOutlined, TableOutlined } from "@ant-design/icons"
 import { AutoSizer, Collection } from "react-virtualized"
 
 const HanziWriter = require("hanzi-writer")
@@ -10,11 +11,6 @@ const hanziData = require("../resources/hanzi.json")
 const { Header, Content, Footer, Sider } = Layout
 const { SubMenu } = Menu
 const { Search } = Input
-
-const pronunciations = {
-  "Definition": {},
-  "Mandarin": {}
-}
 
 var hanzi = null
 
@@ -33,7 +29,7 @@ const IndexPage = () => {
     }
   })
 
-  const [rightCollapsed, setRightCollapse] = useState(window.innerWidth < window.innerHeight ? true : false)
+  const [leftCollapsed, setLeftCollapse] = useState(window.innerWidth < window.innerHeight ? true : false)
   const [animationSpeed, setAnimationSpeed] = useState(1)
   const [isModalVisible, setIsModalVisible] = useState(false)
 
@@ -103,10 +99,32 @@ const IndexPage = () => {
       <Helmet title="Learn Chinese Characters">
 
       </Helmet>
-      <Layout>
+      <Layout style={{ minHeight: '100vh' }}>
+        <Sider
+          collapsible collapsed={leftCollapsed} onCollapse={() => setLeftCollapse(!leftCollapsed)}
+          collapsedWidth={window.innerWidth < window.innerHeight && leftCollapsed ? "0" : Sider.defaultProps}
+          zeroWidthTriggerStyle={{position: "fixed", left: 0, right: "auto", bottom: 0, top: "auto"}}
+          style={{
+            overflow: "auto",
+            height: "calc(100vh - 48px)",
+            position: "fixed",
+            left: 0,
+            zIndex: 999
+          }}
+        >
+          <div className="logo" />
+          <Menu theme="dark" mode="inline" defaultSelectedKeys={['1']}>
+            <Menu.Item key="1" icon={<HomeOutlined />}>Home</Menu.Item>
+            <Menu.Item key="2" icon={<HighlightOutlined />}>Text Quiz</Menu.Item>
+            <Menu.Item key="3" icon={<RocketOutlined />}>Stroke Racer</Menu.Item>
+            <Menu.Item key="4" icon={<TableOutlined />}>Generate Word Sheet</Menu.Item>
+          </Menu>
+        </Sider>
         <Layout className="site-layout">
-          <Header className="site-layout-background" style={{ padding: 0, textAlign: "center" }}>
-            Learn Chinese Characters
+          <Header className="site-layout-background">
+            <div style={{ textAlign: 'center' }}>
+              Learn Chinese Characters
+            </div>
           </Header>
           <Content style={{ margin: "24px 16px 0", overflow: "initial" }}>
             <div className="site-layout-background" style={{ padding: 24, textAlign: "center" }}>
@@ -177,31 +195,6 @@ const IndexPage = () => {
           </Content>
           <Footer style={{ textAlign: "center" }}>Joris Truong</Footer>
         </Layout>
-        <Sider
-          collapsible collapsed={rightCollapsed} onCollapse={() => setRightCollapse(!rightCollapsed)}
-          collapsedWidth={window.innerWidth < window.innerHeight && rightCollapsed ? "0" : Sider.defaultProps}
-          zeroWidthTriggerStyle={{position: "fixed", right: 0, left: "auto", bottom: 0, top: "auto"}}
-          reverseArrow
-          style={{
-            overflow: "auto",
-            height: "calc(100vh - 48px)",
-            position: "fixed",
-            right: 0,
-            zIndex: 999
-          }}
-        >
-          <div className="logo" />
-          <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
-            {
-              Object.keys(pronunciations).map((key, value) => {
-                return(
-                  <SubMenu key={key} title={key}>
-                  </SubMenu>
-                )
-              })
-            }
-          </Menu>
-        </Sider>
       </Layout>,
     </div>
   )
