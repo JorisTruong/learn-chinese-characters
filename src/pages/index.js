@@ -1,15 +1,27 @@
 import React, { useState, useRef, useEffect } from "react"
 import Helmet from "react-helmet"
-import { Layout, Menu, Button, Input, Slider, InputNumber, Modal, Row, Col } from "antd"
+import { Layout, Menu, Button, Input, Slider, InputNumber, Modal, AutoComplete, Row, Col } from "antd"
 import { HomeOutlined, HighlightOutlined, RocketOutlined, TableOutlined } from "@ant-design/icons"
 import { AutoSizer, Collection } from "react-virtualized"
 
 const HanziWriter = require("hanzi-writer")
+const jsonQuery = require('json-query')
 
 const hanziData = require("../resources/hanzi.json")
+const hanziDataQuery = { "characters": hanziData }
+const hanziDataQueryPinyinSort = { "characters": hanziData.sort(function(a, b) {
+  var pinyinA = a.details.pinyin[0]
+  var pinyinB = b.details.pinyin[0]
+  if (pinyinA == null || pinyinB == null) {
+    return 0
+  } else {
+    var normalizedPinyinA = pinyinA.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    var normalizedPinyinB = pinyinB.normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+    return (normalizedPinyinA < normalizedPinyinB) ? -1 : (normalizedPinyinA > normalizedPinyinB) ? 1 : 0
+  }
+}) }
 
 const { Header, Content, Footer, Sider } = Layout
-const { SubMenu } = Menu
 const { Search } = Input
 
 var hanzi = null
@@ -32,6 +44,7 @@ const IndexPage = () => {
   const [leftCollapsed, setLeftCollapse] = useState(window.innerWidth < window.innerHeight ? true : false)
   const [animationSpeed, setAnimationSpeed] = useState(1)
   const [isModalVisible, setIsModalVisible] = useState(false)
+  const [suggestions, setSuggestions] = useState([])
 
   const setSpeedLevel = (value) => {
     setAnimationSpeed(value)
@@ -55,6 +68,53 @@ const IndexPage = () => {
       hanzi._options.delayBetweenStrokes = 1
       hanzi._options.strokeAnimationSpeed = 5
     }
+  }
+
+  const handleSearch = (value) => {
+    setSuggestions(value ? searchResult(value) : [])
+  }
+
+  const helpers = {
+    pinyinSearch: function(input, query) {
+      var normalizedPinyin = input.pinyin.map(element => element.normalize("NFD").replace(/[\u0300-\u036f]/g, ""))
+      if (normalizedPinyin.find(element => element.startsWith(query.toLowerCase()))) {
+        return input
+      } else {
+        return null
+      }
+    }
+  }
+
+  const searchResult = (query) => {
+    var hanziQuery = jsonQuery(['characters[*character=?]', query], {data: hanziDataQuery})
+    var pinyinQuery = jsonQuery(['characters[*details][*:pinyinSearch(?)]', query], {data: hanziDataQueryPinyinSort, locals: helpers})
+    var result = hanziQuery.key.concat(pinyinQuery.key)
+    if (result == null) {
+      return null
+    } else {
+      return result
+        .map((item) => {
+          const category = `${hanziData[item].character}`;
+          return {
+            value: category,
+            label: (
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <span>
+                  {hanziData[item].character}
+                </span>
+                <span>
+                  {hanziData[item].details.pinyin}
+                </span>
+              </div>
+            )
+          }
+        })
+      }
   }
 
   const setHanzi = (value) => {
@@ -128,7 +188,17 @@ const IndexPage = () => {
           </Header>
           <Content style={{ margin: "24px 16px 0", overflow: "initial" }}>
             <div className="site-layout-background" style={{ padding: 24, textAlign: "center" }}>
-              <Search placeholder="Input Chinese Character" enterButton={"OK"} style={{ width: window.innerWidth < window.innerHeight ? "75vw" : "20vw" }} onSearch={(value) => setHanzi(value)} />
+              <AutoComplete
+                dropdownMatchSelectWidth={252}
+                style={{
+                  width: 300,
+                }}
+                options={suggestions}
+                onSearch={handleSearch}
+                onSelect={(value) => setHanzi(value)}
+              >
+                <Search placeholder="Input Chinese Character" enterButton={"OK"} style={{ width: window.innerWidth < window.innerHeight ? "75vw" : "20vw" }} onSearch={(value) => setHanzi(value)} />
+              </AutoComplete>
               <Row gutter={16} style={{ padding: 15 }}>
                 <Col lg={{ span: 4, offset: 10 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }}>
                   <Button type="primary" onClick={() => setIsModalVisible(true)}>Browse all characters</Button>
