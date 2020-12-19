@@ -7,3 +7,110 @@
 .site-layout .site-layout-background {
   background: #fff;
 }
+
+.message {
+  max-width: 100%;
+  font-size: 4vh;
+  color: #ffffff;
+  margin: 0 auto;
+  text-shadow: 0px 1px 3px rgba(0, 0, 0, .5);
+}
+
+.message span {
+  font-size: 2vh;
+}
+
+.kenburns {
+  background: url("../images/404.jpg") center;
+  background-size: cover;
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 5;
+  -webkit-animation: kenburns 30s infinite;
+  -moz-animation: kenburns 30s infinite;
+  animation: kenburns 30s infinite;
+}
+
+.kenburns::after {
+  content: '';
+  position: absolute;
+  z-index: -5;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(45, 49, 56, 0.4);
+}
+
+@-webkit-keyframes kenburns {
+  0% {
+      -webkit-transform: scale(1);
+  }
+  50% {
+      -webkit-transform: scale(1.2);
+  }
+  100% {
+      -webkit-transform: scale(1);
+  }
+}
+
+@-moz-keyframes kenburns {
+  0% {
+      -moz-transform: scale(1);
+  }
+  50% {
+      -moz-transform: scale(1.2);
+  }
+  100% {
+      -moz-transform: scale(1);
+  }
+}
+
+@keyframes kenburns {
+  0% {
+      -webkit-transform: scale(1);
+      -moz-transform: scale(1);
+      -ms-transform: scale(1);
+      -o-transform: scale(1);
+      transform: scale(1);
+  }
+  50% {
+      -webkit-transform: scale(1.2);
+      -moz-transform: scale(1.2);
+      -ms-transform: scale(1.2);
+      -o-transform: scale(1.2);
+      transform: scale(1.2);
+  }
+  100% {
+      -webkit-transform: scale(1);
+      -moz-transform: scale(1);
+      -ms-transform: scale(1);
+      -o-transform: scale(1);
+      transform: scale(1);
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .centered .item-title {
+      padding: 100px 5%;
+      position: relative;
+      top: 0;
+      -webkit-transform: translateY(0);
+      -moz-transform: translateY(0);
+      -ms-transform: translateY(0);
+      -o-transform: translateY(0);
+      transform: translateY(0);
+  }
+  .centered .item-title #message {
+      min-height: 240px;
+      font-size: 50px;
+      font-weight: 700;
+  }
+  .centered .item-title #message span {
+      font-size: 30px;
+      font-weight: 500;
+  }
+}
