@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react"
-import { Statistic, Card, Button, Input, Row, Col, message } from "antd"
+import { Statistic, Card, Button, Input, Row, Col } from "antd"
 
 
 const HanziWriter = require("hanzi-writer")
@@ -41,7 +41,7 @@ const Race = () => {
   }
 
   const setQuiz = () => {
-    if (inputString.length == 0) {
+    if (inputString.length === 0) {
       hanzi.setCharacter(hanziData[getRandomInt(0, 9574)].character)
     } else {
       hanzi.setCharacter(inputString[getRandomInt(0, inputString.length)])
