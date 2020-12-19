@@ -91,7 +91,7 @@ const IndexPage = () => {
     var hanziQuery = jsonQuery(['characters[*character=?]', query], {data: hanziDataQuery})
     var pinyinQuery = jsonQuery(['characters[*details][*:pinyinSearch(?)]', query], {data: hanziDataQueryPinyinSort, locals: helpers})
     var result = hanziQuery.key.concat(pinyinQuery.key)
-    if (hanziQuery.key.length == 1) {
+    if (hanziQuery.key.length === 1) {
       var definition = hanziData[hanziQuery.key[0]].details.definition
       var writingSystemQuery = jsonQuery(["characters[*details][*definition=?]", definition], {data: hanziDataQuery})
       result = Array.from(new Set(result.concat(writingSystemQuery.key)))
@@ -131,7 +131,7 @@ const IndexPage = () => {
     } else {
       if (value !== '') {
         var hanziQuery = jsonQuery(['characters[*character=?]', value], {data: hanziDataQuery})
-        if (hanziQuery.key.length == 1) {
+        if (hanziQuery.key.length === 1) {
           var foundHanzi = hanziData[hanziQuery.key[0]]
           hanzi.setCharacter(foundHanzi.character)
           setCurrentHanzi(foundHanzi)
