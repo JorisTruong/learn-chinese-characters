@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { Link } from "gatsby"
 import Helmet from "react-helmet"
 import { Layout, Menu, Row, Col } from "antd"
 import { HomeOutlined, HighlightOutlined, RocketOutlined, TableOutlined } from "@ant-design/icons"
@@ -30,10 +31,10 @@ const Skeleton = (props) => {
         >
           <div className="logo" />
           <Menu theme="dark" mode="inline" defaultSelectedKeys={[props.index]}>
-            <Menu.Item key="1" icon={<HomeOutlined />}>Home</Menu.Item>
-            <Menu.Item key="2" icon={<HighlightOutlined />}>Text Quiz</Menu.Item>
-            <Menu.Item key="3" icon={<RocketOutlined />}>Stroke Racer</Menu.Item>
-            <Menu.Item key="4" icon={<TableOutlined />}>Generate Word Sheet</Menu.Item>
+            <Menu.Item key="1" icon={<HomeOutlined />}><Link to="/">Home</Link></Menu.Item>
+            <Menu.Item key="2" icon={<HighlightOutlined />}><Link to="/textQuiz">Text Quiz</Link></Menu.Item>
+            <Menu.Item key="3" icon={<RocketOutlined />}><Link to="/racer">Stroke Racer</Link></Menu.Item>
+            <Menu.Item key="4" icon={<TableOutlined />}><Link to="/generate">Generate Word Sheet</Link></Menu.Item>
           </Menu>
         </Sider>
         <Layout className="site-layout">

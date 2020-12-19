@@ -4,7 +4,6 @@ import Skeleton from "../components/skeleton.js"
 import Home from "../components/home.js"
 
 const IndexPage = () => {  
-
   return (
     <Skeleton index={"1"}>
       <Home />
