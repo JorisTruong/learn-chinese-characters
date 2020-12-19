@@ -263,7 +263,44 @@ const IndexPage = () => {
               </div>
             </div>
           </Content>
-          <Footer style={{ textAlign: "center" }}>Joris Truong</Footer>
+          <Footer>
+            <div style={{ textAlign: "center", padding: 15 }} >
+              Joris Truong
+            </div>
+            <Row>
+              <Col lg={{ span: 1, offset: 10 }} md={{ span: 2, offset: 8 }} xs={{ span: 4, offset: 4 }}>
+                <div style={{ display: 'flex', width: "100%", justifyContent: "center", alignItems: "center" }}>
+                  <a href="mailto:joris.truong@protonmail.com">
+                    <img src={require("../images/protonmail.svg")} height="32px" width="32px" alt="protonmail"/>
+                  </a>
+                </div>
+              </Col>
+              <Col lg={1} md={2} xs={4}>
+                <div style={{ display: 'flex', width: "100%", justifyContent: "center", alignItems: "center" }}>
+                  <a href="https://codeberg.org/joristruong" target="_blank" rel="noreferrer">
+                    <img src={require("../images/codeberg.svg")} height="32px" width="32px" alt="codeberg"/>
+                  </a>
+                </div>
+              </Col>
+              <Col lg={1} md={2} xs={4}>
+                <div style={{ display: 'flex', width: "100%", justifyContent: "center", alignItems: "center" }}>
+                  <a href="https://github.com/JorisTruong" target="_blank" rel="noreferrer">
+                    <img src={require("../images/github.svg")} height="32px" width="32px" alt="github"/>
+                  </a>
+                </div>
+              </Col>
+              <Col lg={1} md={2} xs={4}>
+                <div style={{ display: 'flex', width: "100%", justifyContent: "center", alignItems: "center" }}>
+                  <a href="https://www.linkedin.com/in/joris-truong-35a383131/" target="_blank" rel="noreferrer">
+                    <img src={require("../images/linkedin.svg")} height="32px" width="32px" alt="linkedin"/>
+                  </a>
+                </div>
+              </Col>
+            </Row>
+            <div style={{ textAlign: "center", padding: 15, fontSize: 10 }} >
+              <i>Contact icons by <a href="https://github.com/aegis-icons/aegis-icons" target="_blank" rel="noreferrer">Aegis</a></i>
+            </div>
+          </Footer>
         </Layout>
       </Layout>,
     </div>
