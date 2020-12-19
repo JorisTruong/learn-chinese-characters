@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react"
 import Helmet from "react-helmet"
-import { Layout, Menu, Button, Input, Slider, InputNumber, Modal, AutoComplete, Row, Col } from "antd"
-import { HomeOutlined, HighlightOutlined, RocketOutlined, TableOutlined } from "@ant-design/icons"
+import { Layout, Menu, Button, Input, Slider, InputNumber, Modal, AutoComplete, Collapse, Tooltip, Row, Col } from "antd"
+import { HomeOutlined, HighlightOutlined, RocketOutlined, TableOutlined, FlagOutlined } from "@ant-design/icons"
 import { AutoSizer, Collection } from "react-virtualized"
 
 const HanziWriter = require("hanzi-writer")
@@ -23,6 +23,7 @@ const hanziDataQueryPinyinSort = { "characters": hanziData.sort(function(a, b) {
 
 const { Header, Content, Footer, Sider } = Layout
 const { Search } = Input
+const { Panel } = Collapse;
 
 var hanzi = null
 
@@ -45,6 +46,7 @@ const IndexPage = () => {
   const [animationSpeed, setAnimationSpeed] = useState(1)
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [suggestions, setSuggestions] = useState([])
+  const [currentHanzi, setCurrentHanzi] = useState({"character": "\u5b66", "details": {"definition": "learning, knowledge, science; to study, to go to school; -ology", "pinyin": ["xu\u00e9"]}})
 
   const setSpeedLevel = (value) => {
     setAnimationSpeed(value)
@@ -122,9 +124,19 @@ const IndexPage = () => {
       }
   }
 
-  const setHanzi = (value) => {
-    if (value !== '') {
+  const setHanzi = (value, obj) => {
+    if (obj != null) {
       hanzi.setCharacter(value)
+      setCurrentHanzi(obj)
+    } else {
+      if (value !== '') {
+        var hanziQuery = jsonQuery(['characters[*character=?]', value], {data: hanziDataQuery})
+        if (hanziQuery.key.length == 1) {
+          var foundHanzi = hanziData[hanziQuery.key[0]]
+          hanzi.setCharacter(foundHanzi.character)
+          setCurrentHanzi(foundHanzi)
+        }
+      }
     }
   }
 
@@ -135,7 +147,7 @@ const IndexPage = () => {
     style.justifyContent = "center"
     style.alignItems = "center"
     return (
-      <Button key={key} style={style} onClick={() => {setIsModalVisible(false); setHanzi(hanziData[index].character)}}>
+      <Button key={key} style={style} onClick={() => {setIsModalVisible(false); setHanzi(hanziData[index].character, hanziData[index])}}>
         {hanziData[index].character}
       </Button>
     );
@@ -158,6 +170,15 @@ const IndexPage = () => {
       }
     }
   }
+
+  const report = () => (
+    <Tooltip title="Make a suggestion">
+      <Button type="ghost" shape="circle" icon={<FlagOutlined />} onClick={event => {
+        event.stopPropagation()
+        console.log(currentHanzi)
+      }} />
+    </Tooltip>
+  );
 
   return (
     <div>
@@ -202,7 +223,7 @@ const IndexPage = () => {
                 onSearch={handleSearch}
                 onSelect={(value) => setHanzi(value)}
               >
-                <Search placeholder="Search a Chinese Character" enterButton={"OK"} style={{ width: window.innerWidth < window.innerHeight ? "75vw" : "20vw" }} onSearch={(value) => setHanzi(value)} />
+                <Search placeholder="Search a Chinese Character" enterButton={"OK"} style={{ width: window.innerWidth < window.innerHeight ? "75vw" : "20vw" }} onSearch={(value) => setHanzi(value, null)} />
               </AutoComplete>
               <Row gutter={16} style={{ padding: 15 }}>
                 <Col lg={{ span: 4, offset: 10 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }}>
@@ -233,6 +254,27 @@ const IndexPage = () => {
                   <line x1="200" y1="200" x2="0" y2="200" stroke="#555" />
                   <line x1="200" y1="200" x2="200" y2="0" stroke="#555" />
                 </svg>
+              </div>
+              <div style={{ padding: 30 }}>
+                <Row align="middle">
+                  <Col lg={{ span: 6, offset: 9 }} md={{ span: 12, offset: 6 }} xs={{ span: 24 }}>
+                    <Collapse
+                      defaultActiveKey={[]}
+                    >
+                      {
+                        Object.keys(currentHanzi.details).map((detail) => {
+                          return(
+                            <Panel header={detail} key={detail} extra={report(currentHanzi)}>
+                              <div style={{ textAlign: 'start' }}>
+                                {currentHanzi.details[detail]}
+                              </div>
+                            </Panel>
+                          )
+                        })
+                      }
+                    </Collapse>
+                  </Col>
+                </Row>
               </div>
               <div style={{ padding: 10 }}>
                 <Row gutter={16} align="middle">
