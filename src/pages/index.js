@@ -264,7 +264,7 @@ const IndexPage = () => {
                       {
                         Object.keys(currentHanzi.details).map((detail) => {
                           return(
-                            <Panel header={detail} key={detail} extra={report(currentHanzi)}>
+                            <Panel header={detail[0].toUpperCase() + detail.slice(1)} key={detail} extra={report(currentHanzi)}>
                               <div style={{ textAlign: 'start' }}>
                                 {currentHanzi.details[detail]}
                               </div>
