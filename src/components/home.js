@@ -26,7 +26,7 @@ const { Paragraph, Text } = Typography
 
 var hanzi = null
 
-const Home = () => {  
+const Home = () => {
   const divRef = useRef()
   useEffect(() => {
     if (hanzi == null) {

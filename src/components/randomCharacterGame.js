@@ -87,7 +87,7 @@ const Race = (props) => {
               How many characters will you correctly write in 60 seconds? The random character game tests your limits!
             </Paragraph>
             <Paragraph style={{ textAlign: "justify" }}>
-              During 60 seconds, random characters will appear on the writing box. Write down the correct strokes by order to earn points and test your precision. Challenge yourself, measure your quickness and challenge your friends!
+              During 60 seconds, random characters will appear on the writing box. Write down the correct strokes by order to earn points and test your precision. You can also input your own characters, and the game will select random characters based on your input. If there is no input, the game will choose between all available characters. Challenge yourself, measure your quickness and challenge your friends!
             </Paragraph>
           </Typography>
         </Col>
