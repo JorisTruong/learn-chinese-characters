@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect } from "react"
 import { Statistic, Card, Button, Input, Row, Col } from "antd"
+import { connect } from "react-redux"
 
+import { updateCorrectStrokes, updateMistakeStrokes, updateCorrectChar, updatePrecision } from "../redux/actions.js"
 
 const HanziWriter = require("hanzi-writer")
 
@@ -10,10 +12,12 @@ const { TextArea } = Input;
 const { Countdown } = Statistic;
 
 var hanzi = null
-var _correctAnswers = 0
-var _totalMistakes = 0
+var _totalCorrectStrokes = 0
+var _totalMistakesStrokes = 0
+var _totalCorrectChar = 0
+var _precision = 0
 
-const Race = () => {
+const Race = (props) => {
   const divRef = useRef()
   useEffect(() => {
     if (hanzi == null) {
@@ -47,10 +51,22 @@ const Race = () => {
       hanzi.setCharacter(inputString[getRandomInt(0, inputString.length)])
     }
     hanzi.quiz({
+      onMistake: function(strokeData) {
+        _totalMistakesStrokes = _totalMistakesStrokes + 1
+        props.updateMistakeStrokes(_totalMistakesStrokes)
+        _precision = 100 * _totalCorrectStrokes / (_totalCorrectStrokes + _totalMistakesStrokes)
+        props.updatePrecision(_precision)
+      },
+      onCorrectStroke: function(strokeData) {
+        _totalCorrectStrokes = _totalCorrectStrokes + 1
+        props.updateCorrectStrokes(_totalCorrectStrokes)
+        _precision = 100 * _totalCorrectStrokes / (_totalCorrectStrokes + _totalMistakesStrokes)
+        props.updatePrecision(_precision)
+      },
       onComplete: function(summaryData) {
         setTimeout(() => {
-          _correctAnswers = _correctAnswers + 1
-          _totalMistakes = _totalMistakes + summaryData.totalMistakes
+          _totalCorrectChar = _totalCorrectChar + 1
+          props.updateCorrectChar(_totalCorrectChar)
           setQuiz()
         }, 100)
       }
@@ -78,36 +94,64 @@ const Race = () => {
             <Countdown title="60-second timer" value={deadline} format="mm:ss:SSS" onFinish={() => {hanzi.cancelQuiz(); setFinished(true);}}/>
           </Col>
           <Col lg={{ span: 4, offset: 10 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }}>
-            <Button type="primary" disabled={!finished} onClick={() => {_correctAnswers = 0; _totalMistakes = 0; setDeadline(Date.now() + 1000 * 60); setFinished(false); setQuiz();}} style={{ width: "100%" }}>Ready</Button>
+            <Button type="primary" disabled={!finished} onClick={() => {props.updateCorrectStrokes(0); props.updateMistakeStrokes(0); setDeadline(Date.now() + 1000 * 60); setFinished(false); setQuiz();}} style={{ width: "100%" }}>Ready</Button>
           </Col>
         </Row>
-        {finished ? 
-          <Row gutter={16}>
-            <Col lg={{ span: 4, offset: 8 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }} style={{ paddingTop: 25 }}>
-              <Card>
-                <Statistic
-                  title="Correct answers"
-                  value={_correctAnswers}
-                  precision={0}
-                  valueStyle={{ color: '#3f8600' }}
-                />
-              </Card>
-            </Col>
-            <Col lg={{ span: 4, offset: 0 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }} style={{ paddingTop: 25 }}>
-              <Card>
-                <Statistic
-                  title="Mistakes"
-                  value={_totalMistakes}
-                  precision={0}
-                  valueStyle={{ color: '#cf1322' }}
-                />
-              </Card>
-            </Col>
-          </Row> :
-        null}
+        <Row gutter={16}>
+          <Col lg={{ span: 4, offset: 8 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }} style={{ paddingTop: 25 }}>
+            <Card>
+              <Statistic
+                title="Correct strokes"
+                value={props.correctStrokes}
+                precision={0}
+                valueStyle={{ color: '#3f8600' }}
+              />
+            </Card>
+          </Col>
+          <Col lg={{ span: 4, offset: 0 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }} style={{ paddingTop: 25 }}>
+            <Card>
+              <Statistic
+                title="Mistake strokes"
+                value={props.mistakeStrokes}
+                precision={0}
+                valueStyle={{ color: '#cf1322' }}
+              />
+            </Card>
+          </Col>
+        </Row>
+        <Row gutter={16}>
+          <Col lg={{ span: 4, offset: 8 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }} style={{ paddingTop: 25 }}>
+            <Card>
+              <Statistic
+                title="Correct characters"
+                value={props.correctChar}
+                precision={0}
+                valueStyle={{ color: '#3f8600' }}
+              />
+            </Card>
+          </Col>
+          <Col lg={{ span: 4, offset: 0 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }} style={{ paddingTop: 25 }}>
+            <Card>
+              <Statistic
+                title="Precision"
+                value={_precision}
+                precision={2}
+                suffix={"%"}
+              />
+            </Card>
+          </Col>
+        </Row>
       </div>
     </div>
   )
 }
 
-export default Race
+function mapStateToProps(state) {
+  const correctStrokes = state.updateRandomCharacterGame.correctStrokes
+  const mistakeStrokes = state.updateRandomCharacterGame.mistakeStrokes
+  const correctChar = state.updateRandomCharacterGame.correctChar
+  const precision = state.updateRandomCharacterGame.precision
+  return { correctStrokes, mistakeStrokes, correctChar, precision }
+}
+
+export default connect(mapStateToProps, { updateCorrectStrokes, updateMistakeStrokes, updateCorrectChar, updatePrecision })(Race)
