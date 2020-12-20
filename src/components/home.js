@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react"
-import { Button, Input, Slider, InputNumber, Modal, AutoComplete, Collapse, Tooltip, Row, Col } from "antd"
+import { Typography, Button, Input, Slider, InputNumber, Modal, AutoComplete, Collapse, Tooltip, Row, Col } from "antd"
 import { FlagOutlined } from "@ant-design/icons"
 import { AutoSizer, Collection } from "react-virtualized"
 
@@ -21,7 +21,8 @@ const hanziDataQueryPinyinSort = { "characters": hanziData.sort(function(a, b) {
 }) }
 
 const { Search } = Input
-const { Panel } = Collapse;
+const { Panel } = Collapse
+const { Paragraph, Text } = Typography
 
 var hanzi = null
 
@@ -179,6 +180,21 @@ const Home = () => {
 
   return (
     <div className="site-layout-background" style={{ padding: 24, textAlign: "center" }}>
+      <Row style={{ paddingBottom: 50 }}>
+        <Col lg={{ span: 12, offset: 6 }} md={{ span: 20, offset: 2 }} xs={{ span: 24 }}>
+          <Typography>
+            <Paragraph>
+              Welcome to <Text strong>Learn Chinese Characters</Text>!
+            </Paragraph>
+            <Paragraph style={{ textAlign: "justify" }}>
+              The goal of this website is to learn about how to write Chinese characters based on stroke order. You can choose traditional or simplified characters, get information on their definition, their pinyin pronunciation, and more! This website is meant to be collaborative and not Mandarin only. Feel free to submit pronunciations on your own Chinese dialect, so that people can learn more about your dialect!
+            </Paragraph>
+            <Paragraph style={{ textAlign: "justify" }}>
+              Search a Chinese character by typing it directly, or using pinyin. You can also browse all available Chinese characters in our data. See how to write them or you can even quiz yourself.
+            </Paragraph>
+          </Typography>
+        </Col>
+      </Row>
       <AutoComplete
         dropdownMatchSelectWidth={window.innerWidth < window.innerHeight ? "75vw" : "20vw"}
         style={{

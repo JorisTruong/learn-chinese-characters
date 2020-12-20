@@ -1,11 +1,12 @@
 import React, { useState } from "react"
 import { Link } from "gatsby"
 import Helmet from "react-helmet"
-import { Layout, Menu, Row, Col } from "antd"
+import { Typography, Layout, Menu, Row, Col } from "antd"
 import { HomeOutlined, HighlightOutlined, FieldTimeOutlined, RocketOutlined, TableOutlined } from "@ant-design/icons"
 
 
 const { Header, Content, Footer, Sider } = Layout
+const { Title } = Typography
 
 const Skeleton = (props) => {  
 
@@ -39,9 +40,13 @@ const Skeleton = (props) => {
           </Menu>
         </Sider>
         <Layout className="site-layout">
-          <Header className="site-layout-background">
-            <div style={{ textAlign: 'center' }}>
-              Learn Chinese Characters
+          <Header className="site-layout-background" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+            <div>
+              <Typography>
+                <Title level={window.innerWidth > 480 ? 2 : 4} style={{ margin: 0, textAlign: "center" }}>
+                  Learn Chinese Characters
+                </Title>
+              </Typography>
             </div>
           </Header>
           <Content style={{ margin: "24px 16px 0", overflow: "initial" }}>

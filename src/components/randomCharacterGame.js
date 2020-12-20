@@ -1,15 +1,17 @@
 import React, { useState, useRef, useEffect } from "react"
-import { Statistic, Card, Button, Input, Row, Col } from "antd"
+import { Typography, Statistic, Card, Button, Input, Row, Col } from "antd"
 import { connect } from "react-redux"
 
 import { updateCorrectStrokes, updateMistakeStrokes, updateCorrectChar, updatePrecision } from "../redux/actions.js"
+
 
 const HanziWriter = require("hanzi-writer")
 
 const hanziData = require("../resources/hanzi.json")
 
-const { TextArea } = Input;
-const { Countdown } = Statistic;
+const { TextArea } = Input
+const { Countdown } = Statistic
+const { Title, Paragraph } = Typography
 
 var hanzi = null
 var _totalCorrectStrokes = 0
@@ -75,6 +77,21 @@ const Race = (props) => {
 
   return (
     <div className="site-layout-background" style={{ padding: 24, textAlign: "center" }}>
+      <Row style={{ paddingBottom: 50 }}>
+        <Col lg={{ span: 12, offset: 6 }} md={{ span: 20, offset: 2 }} xs={{ span: 24 }}>
+          <Typography>
+            <Title level={5}>
+              Random Character Game
+            </Title>
+            <Paragraph strong>
+              How many characters will you correctly write in 60 seconds? The random character game tests your limits!
+            </Paragraph>
+            <Paragraph style={{ textAlign: "justify" }}>
+              During 60 seconds, random characters will appear on the writing box. Write down the correct strokes by order to earn points and test your precision. Challenge yourself, measure your quickness and challenge your friends!
+            </Paragraph>
+          </Typography>
+        </Col>
+      </Row>
       <TextArea placeholder="List of characters with no separator" style={{ width: window.innerWidth < window.innerHeight ? "75vw" : "50vw" }} rows={4} value={inputString} onChange={(value) => setInputString(value.target.value)}/>
       <div style={{ padding: 25}} >
         <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" ref={divRef}>

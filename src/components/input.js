@@ -1,11 +1,12 @@
 import React, { useState, useRef, useEffect } from "react"
-import { Button, Input, Row, Col } from "antd"
+import { Typography, Button, Input, Row, Col } from "antd"
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons"
 
 
 const HanziWriter = require("hanzi-writer")
 
-const { TextArea } = Input;
+const { TextArea } = Input
+const { Title, Paragraph } = Typography
 
 var hanzi = null
 var _textPosition = null
@@ -27,30 +28,47 @@ const InputText = () => {
   })
 
   const [inputString, setInputString] = useState('')
+  const [savedInput, setSavedInput] = useState('')
   const [textPosition, setTextPosition] = useState(null)
 
   const updateInput = () => {
     if (inputString !== '') {
+      setSavedInput(inputString)
       hanzi.setCharacter(inputString[0])
       setTextPosition(0)
       _textPosition = 0
+      hanzi.quiz()
     }
   }
 
   const goPrevious = () => {
     setTextPosition(textPosition-1)
     _textPosition = _textPosition-1
-    hanzi.setCharacter(inputString[_textPosition])
+    hanzi.setCharacter(savedInput[_textPosition])
+    hanzi.quiz()
   }
 
   const goNext = () => {
     setTextPosition(textPosition+1)
     _textPosition = _textPosition+1
-    hanzi.setCharacter(inputString[_textPosition])
+    hanzi.setCharacter(savedInput[_textPosition])
+    hanzi.quiz()
   }
 
   return (
     <div className="site-layout-background" style={{ padding: 24, textAlign: "center" }}>
+      <Row style={{ paddingBottom: 50 }}>
+        <Col lg={{ span: 12, offset: 6 }} md={{ span: 20, offset: 2 }} xs={{ span: 24 }}>
+          <Typography>
+            <Title level={5}>
+              Text input quiz
+            </Title>
+            <Paragraph style={{ textAlign: "justify" }}>
+              The text input quiz allows you to focus on learning the stroke order of Chinese characters. Type your own text and quiz yourself word by word. You can re-quiz yourself on a word, go to the previous word or to the next word of your text.
+            </Paragraph>
+          </Typography>
+        </Col>
+      </Row>
       <TextArea placeholder="Type your text" style={{ width: window.innerWidth < window.innerHeight ? "75vw" : "50vw" }} rows={4} value={inputString} onChange={(value) => setInputString(value.target.value)}/>
       <div style={{ padding: 10 }}>
         <Row gutter={16}>
@@ -81,7 +99,7 @@ const InputText = () => {
           <Col lg={{ span: 2, offset: textPosition <= 0 ? 11 : 0 }} md={{ span: 12 }} xs={{ span: 20 }}>
             <Button type="primary" onClick={() => hanzi.quiz()} style={{ width: "100%" }}>Quiz</Button>
           </Col>
-          {textPosition != null && textPosition < inputString.length - 1 ?
+          {textPosition != null && textPosition < savedInput.length - 1 ?
             <Col lg={{ span: 2 }} md={{ span: 12 }} xs={{ span: 20 }}>
               <Button type="primary" onClick={goNext} style={{ width: "100%" }}>Next <ArrowRightOutlined/></Button>
             </Col> :
