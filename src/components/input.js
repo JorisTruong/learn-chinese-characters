@@ -25,7 +25,10 @@ const InputText = () => {
         }
       })
     }
-  })
+    return function cleanup() {
+      hanzi = null
+    }
+  }, [])
 
   const [inputString, setInputString] = useState('')
   const [savedInput, setSavedInput] = useState('')

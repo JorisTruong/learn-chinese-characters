@@ -19,7 +19,7 @@ var _totalMistakesStrokes = 0
 var _totalCorrectChar = 0
 var _precision = 0
 
-const Race = (props) => {
+const RandomGame = (props) => {
   const divRef = useRef()
   useEffect(() => {
     if (hanzi == null) {
@@ -34,7 +34,10 @@ const Race = (props) => {
         }
       })
     }
-  })
+    return function cleanup() {
+      hanzi = null
+    }
+  }, [])
 
   const [inputString, setInputString] = useState('')
   const [deadline, setDeadline] = useState(Date.now())
@@ -171,4 +174,4 @@ function mapStateToProps(state) {
   return { correctStrokes, mistakeStrokes, correctChar, precision }
 }
 
-export default connect(mapStateToProps, { updateCorrectStrokes, updateMistakeStrokes, updateCorrectChar, updatePrecision })(Race)
+export default connect(mapStateToProps, { updateCorrectStrokes, updateMistakeStrokes, updateCorrectChar, updatePrecision })(RandomGame)

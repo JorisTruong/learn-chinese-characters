@@ -39,7 +39,10 @@ const Home = () => {
         strokeAnimationSpeed: 1
       })
     }
-  })
+    return function cleanup() {
+      hanzi = null
+    }
+  }, [])
 
   const [animationSpeed, setAnimationSpeed] = useState(1)
   const [isModalVisible, setIsModalVisible] = useState(false)
@@ -224,7 +227,7 @@ const Home = () => {
           )}
         </AutoSizer>
       </Modal>
-      <div style={{ padding: 25}} >
+      <div style={{ padding: 25}}>
         <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" ref={divRef}>
             <line x1="0" y1="0" x2="200" y2="200" stroke="#DDD" />
             <line x1="200" y1="0" x2="0" y2="200" stroke="#DDD" />

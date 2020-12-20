@@ -1,8 +1,11 @@
 import React, { useState } from "react"
-import { Link } from "gatsby"
 import Helmet from "react-helmet"
 import { Typography, Layout, Menu, Row, Col } from "antd"
 import { HomeOutlined, HighlightOutlined, FieldTimeOutlined, RocketOutlined, TableOutlined } from "@ant-design/icons"
+
+import Home from "./home.js"
+import InputText from "./input.js"
+import RandomGame from "./randomCharacterGame.js"
 
 
 const { Header, Content, Footer, Sider } = Layout
@@ -11,6 +14,7 @@ const { Title } = Typography
 const Skeleton = (props) => {  
 
   const [leftCollapsed, setLeftCollapse] = useState(window.innerWidth < window.innerHeight ? true : false)
+  const [menuKey, setMenuKey] = useState(1)
 
   return (
     <div>
@@ -32,11 +36,11 @@ const Skeleton = (props) => {
         >
           <div className="logo" />
           <Menu theme="dark" mode="inline" defaultSelectedKeys={[props.index]}>
-            <Menu.Item key="1" icon={<HomeOutlined />} style={{whiteSpace: 'normal', height: 'auto'}}><a href="/">Home</a></Menu.Item>
-            <Menu.Item key="2" icon={<HighlightOutlined />} style={{whiteSpace: 'normal', height: 'auto'}}><a href="/textQuiz">Text Quiz</a></Menu.Item>
-            <Menu.Item key="3" icon={<FieldTimeOutlined />} style={{whiteSpace: 'normal', height: 'auto'}}><a href="/game">Random Character Game</a></Menu.Item>
-            <Menu.Item key="4" icon={<RocketOutlined />} style={{whiteSpace: 'normal', height: 'auto'}}><a href="/racer">Stroke Racer</a></Menu.Item>
-            <Menu.Item key="5" icon={<TableOutlined />} style={{whiteSpace: 'normal', height: 'auto'}}><a href="/generate">Generate Word Sheet</a></Menu.Item>
+            <Menu.Item key="1" icon={<HomeOutlined />} style={leftCollapsed ? {} : {whiteSpace: 'normal', height: 'auto'}} onClick={() => setMenuKey(1)}>Home</Menu.Item>
+            <Menu.Item key="2" icon={<HighlightOutlined />} style={leftCollapsed ? {} : {whiteSpace: 'normal', height: 'auto'}} onClick={() => setMenuKey(2)}>Text Quiz</Menu.Item>
+            <Menu.Item key="3" icon={<FieldTimeOutlined />} style={leftCollapsed ? {} : {whiteSpace: 'normal', height: 'auto'}} onClick={() => setMenuKey(3)}>Random Character Game</Menu.Item>
+            <Menu.Item key="4" icon={<RocketOutlined />} style={leftCollapsed ? {} : {whiteSpace: 'normal', height: 'auto'}}>Stroke Racer</Menu.Item>
+            <Menu.Item key="5" icon={<TableOutlined />} style={leftCollapsed ? {} : {whiteSpace: 'normal', height: 'auto'}}>Generate Word Sheet</Menu.Item>
           </Menu>
         </Sider>
         <Layout className="site-layout">
@@ -50,7 +54,15 @@ const Skeleton = (props) => {
             </div>
           </Header>
           <Content style={{ margin: "24px 16px 0", overflow: "initial" }}>
-            {props.children}
+            {
+              menuKey === 1 ?
+              <Home /> :
+              menuKey === 2 ?
+              <InputText /> :
+              menuKey === 3 ?
+              <RandomGame /> :
+              <Home />
+            }
           </Content>
           <Footer>
             <div style={{ textAlign: "center", padding: 15 }} >
