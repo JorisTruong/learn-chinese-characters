@@ -4,10 +4,6 @@ import { Link } from "gatsby"
 import { Typography, Layout, Menu, Row, Col } from "antd"
 import { HomeOutlined, HighlightOutlined, FieldTimeOutlined, RocketOutlined, TableOutlined } from "@ant-design/icons"
 
-import Home from "./home.js"
-import InputText from "./input.js"
-import RandomGame from "./randomCharacterGame.js"
-
 
 const { Header, Content, Footer, Sider } = Layout
 const { Title } = Typography
@@ -15,7 +11,6 @@ const { Title } = Typography
 const Skeleton = (props) => {  
 
   const [leftCollapsed, setLeftCollapse] = useState(window.innerWidth < window.innerHeight ? true : false)
-  const [menuKey, setMenuKey] = useState(1)
 
   return (
     <div>
