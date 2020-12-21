@@ -21,6 +21,7 @@ const InputText = () => {
         height: 200,
         padding: 5,
         showOutline: true,
+        showHintAfterMisses: false,
         onLoadCharDataError: function(reason) {
           console.log('Oh No! Something went wrong :(')
         }
