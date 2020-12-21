@@ -10,6 +10,7 @@ const { Title, Paragraph } = Typography
 
 var hanzi = null
 var _textPosition = null
+var _strokeNumber = null
 
 const InputText = () => {  
   const divRef = useRef()
@@ -34,28 +35,40 @@ const InputText = () => {
   const [savedInput, setSavedInput] = useState('')
   const [textPosition, setTextPosition] = useState(null)
 
+  const writerOptions = {
+    onCorrectStroke: function(strokeData) {
+      _strokeNumber = _strokeNumber + 1
+    },
+    onComplete: function(summaryData) {
+      _strokeNumber = 0
+    }
+  }
+
   const updateInput = () => {
     if (inputString !== '') {
       setSavedInput(inputString)
       hanzi.setCharacter(inputString[0])
       setTextPosition(0)
       _textPosition = 0
-      hanzi.quiz()
+      _strokeNumber = 0
+      hanzi.quiz(writerOptions)
     }
   }
 
   const goPrevious = () => {
     setTextPosition(textPosition-1)
     _textPosition = _textPosition-1
+    _strokeNumber = 0
     hanzi.setCharacter(savedInput[_textPosition])
-    hanzi.quiz()
+    hanzi.quiz(writerOptions)
   }
 
   const goNext = () => {
     setTextPosition(textPosition+1)
     _textPosition = _textPosition+1
+    _strokeNumber = 0
     hanzi.setCharacter(savedInput[_textPosition])
-    hanzi.quiz()
+    hanzi.quiz(writerOptions)
   }
 
   return (
@@ -93,20 +106,25 @@ const InputText = () => {
         </svg>
       </div>
       <div style={{ padding: 10 }}>
-        <Row gutter={16}>
+        <Row gutter={16} style={{ padding: 15 }}>
           {textPosition > 0 ?
             <Col lg={{ span: 2, offset: 9 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }}>
               <Button type="primary" onClick={goPrevious} style={{ width: "100%" }}><ArrowLeftOutlined/> Previous</Button>
             </Col> :
           null}
           <Col lg={{ span: 2, offset: textPosition <= 0 ? 11 : 0 }} md={{ span: 12 }} xs={{ span: 20 }}>
-            <Button type="primary" onClick={() => hanzi.quiz()} style={{ width: "100%" }}>Quiz</Button>
+            <Button type="primary" onClick={() => {_strokeNumber = 0; hanzi.quiz()}} style={{ width: "100%" }}>Quiz</Button>
           </Col>
           {textPosition != null && textPosition < savedInput.length - 1 ?
             <Col lg={{ span: 2 }} md={{ span: 12 }} xs={{ span: 20 }}>
               <Button type="primary" onClick={goNext} style={{ width: "100%" }}>Next <ArrowRightOutlined/></Button>
             </Col> :
           null}
+        </Row>
+        <Row gutter={16} style={{ padding: 15 }}>
+          <Col lg={{ span: 2, offset: 11 }} md={{ span: 12 }} xs={{ span: 20 }}>
+            <Button type="primary" onClick={() => hanzi.highlightStroke(_strokeNumber)} style={{ width: "100%" }}>Show Hint</Button>
+          </Col>
         </Row>
       </div>
     </div>
