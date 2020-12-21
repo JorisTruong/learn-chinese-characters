@@ -1,5 +1,6 @@
 import React, { useState } from "react"
 import Helmet from "react-helmet"
+import { Link } from "gatsby"
 import { Typography, Layout, Menu, Row, Col } from "antd"
 import { HomeOutlined, HighlightOutlined, FieldTimeOutlined, RocketOutlined, TableOutlined } from "@ant-design/icons"
 
@@ -36,11 +37,11 @@ const Skeleton = (props) => {
         >
           <div className="logo" />
           <Menu theme="dark" mode="inline" defaultSelectedKeys={[props.index]}>
-            <Menu.Item key="1" icon={<HomeOutlined />} style={leftCollapsed ? {} : {whiteSpace: 'normal', height: 'auto'}} onClick={() => setMenuKey(1)}>Home</Menu.Item>
-            <Menu.Item key="2" icon={<HighlightOutlined />} style={leftCollapsed ? {} : {whiteSpace: 'normal', height: 'auto'}} onClick={() => setMenuKey(2)}>Text Quiz</Menu.Item>
-            <Menu.Item key="3" icon={<FieldTimeOutlined />} style={leftCollapsed ? {} : {whiteSpace: 'normal', height: 'auto'}} onClick={() => setMenuKey(3)}>Random Character Game</Menu.Item>
-            <Menu.Item key="4" icon={<RocketOutlined />} style={leftCollapsed ? {} : {whiteSpace: 'normal', height: 'auto'}}>Stroke Racer</Menu.Item>
-            <Menu.Item key="5" icon={<TableOutlined />} style={leftCollapsed ? {} : {whiteSpace: 'normal', height: 'auto'}}>Generate Word Sheet</Menu.Item>
+            <Menu.Item key="1" icon={<HomeOutlined />} style={leftCollapsed ? {} : {whiteSpace: 'normal', height: 'auto'}}><Link to="/">Home</Link></Menu.Item>
+            <Menu.Item key="2" icon={<HighlightOutlined />} style={leftCollapsed ? {} : {whiteSpace: 'normal', height: 'auto'}}><Link to="/textQuiz">Text Quiz</Link></Menu.Item>
+            <Menu.Item key="3" icon={<FieldTimeOutlined />} style={leftCollapsed ? {} : {whiteSpace: 'normal', height: 'auto'}}><Link to="/random">Random Character Game</Link></Menu.Item>
+            <Menu.Item key="4" icon={<RocketOutlined />} style={leftCollapsed ? {} : {whiteSpace: 'normal', height: 'auto'}}><Link to="/race">Stroke Racer</Link></Menu.Item>
+            <Menu.Item key="5" icon={<TableOutlined />} style={leftCollapsed ? {} : {whiteSpace: 'normal', height: 'auto'}}><Link to="/generate">Generate Word Sheet</Link></Menu.Item>
           </Menu>
         </Sider>
         <Layout className="site-layout">
@@ -55,13 +56,7 @@ const Skeleton = (props) => {
           </Header>
           <Content style={{ margin: "24px 16px 0", overflow: "initial" }}>
             {
-              menuKey === 1 ?
-              <Home /> :
-              menuKey === 2 ?
-              <InputText /> :
-              menuKey === 3 ?
-              <RandomGame /> :
-              <Home />
+              props.children
             }
           </Content>
           <Footer>
