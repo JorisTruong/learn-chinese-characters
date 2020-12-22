@@ -47,7 +47,7 @@ const Home = () => {
   const [animationSpeed, setAnimationSpeed] = useState(1)
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [suggestions, setSuggestions] = useState([])
-  const [currentHanzi, setCurrentHanzi] = useState({"character": "\u5b66", "details": {"definition": "learning, knowledge, science; to study, to go to school; -ology", "pinyin": ["xu\u00e9"]}})
+  const [currentHanzi, setCurrentHanzi] = useState({"character": "\u5b66", "stroke_count": 16, "details": {"definition": "learning, knowledge, science; to study, to go to school; -ology", "pinyin": ["xu\u00e9"]}})
 
   const setSpeedLevel = (value) => {
     setAnimationSpeed(value)
@@ -89,8 +89,8 @@ const Home = () => {
   }
 
   const searchResult = (query) => {
-    var hanziQuery = jsonQuery(['characters[*character=?]', query], {data: hanziDataQuery})
-    var pinyinQuery = jsonQuery(['characters[*details][*:pinyinSearch(?)]', query], {data: hanziDataQueryPinyinSort, locals: helpers})
+    var hanziQuery = jsonQuery(["characters[*character=?]", query], {data: hanziDataQuery})
+    var pinyinQuery = jsonQuery(["characters[*details][*:pinyinSearch(?)]", query], {data: hanziDataQueryPinyinSort, locals: helpers})
     var result = hanziQuery.key.concat(pinyinQuery.key)
     if (hanziQuery.key.length === 1) {
       var definition = hanziData[hanziQuery.key[0]].details.definition
