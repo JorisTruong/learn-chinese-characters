@@ -33,6 +33,7 @@ const InputText = () => {
   }, [])
 
   const [inputString, setInputString] = useState('')
+  const [filteredInputString, setFilteredInputString] = useState('')
   const [savedInput, setSavedInput] = useState('')
   const [textPosition, setTextPosition] = useState(null)
 
@@ -46,9 +47,9 @@ const InputText = () => {
   }
 
   const updateInput = () => {
-    if (inputString !== '') {
-      setSavedInput(inputString)
-      hanzi.setCharacter(inputString[0])
+    if (filteredInputString !== '') {
+      setSavedInput(filteredInputString)
+      hanzi.setCharacter(filteredInputString[0])
       setTextPosition(0)
       _textPosition = 0
       _strokeNumber = 0
@@ -86,7 +87,7 @@ const InputText = () => {
           </Typography>
         </Col>
       </Row>
-      <TextArea placeholder="Type your text" style={{ width: window.innerWidth < window.innerHeight ? "75vw" : "50vw" }} rows={4} value={inputString} onChange={(value) => setInputString(value.target.value)}/>
+      <TextArea placeholder="Type your text" style={{ width: window.innerWidth < window.innerHeight ? "75vw" : "50vw" }} rows={4} value={inputString} onChange={(value) => {setInputString(value.target.value); setFilteredInputString(value.target.value.split("").filter(char => /\p{Script=Han}/u.test(char)).join(""))}}/>
       <div style={{ padding: 10 }}>
         <Row gutter={16}>
           <Col lg={{ span: 4, offset: 10 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }}>
