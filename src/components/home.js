@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react"
 import { Typography, Button, Input, Slider, InputNumber, Modal, AutoComplete, Collapse, Tooltip, Row, Col } from "antd"
-import { FlagOutlined } from "@ant-design/icons"
+import { FlagOutlined, SoundFilled } from "@ant-design/icons"
 import { AutoSizer, Collection } from "react-virtualized"
 
 const HanziWriter = require("hanzi-writer")
@@ -47,7 +47,7 @@ const Home = () => {
   const [animationSpeed, setAnimationSpeed] = useState(1)
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [suggestions, setSuggestions] = useState([])
-  const [currentHanzi, setCurrentHanzi] = useState({"character": "\u5b66", "stroke_count": 16, "details": {"definition": "learning, knowledge, science; to study, to go to school; -ology", "pinyin": ["xu\u00e9"]}})
+  const [currentHanzi, setCurrentHanzi] = useState({"character": "\u5b66", "stroke_count": 16, "details": {"definition": "learning, knowledge, science; to study, to go to school; -ology", "pinyin": ["xu\u00e9"], "pinyin_audio": "http://packs.shtooka.net/cmn-caen-tan/ogg/cmn-e0256f02.ogg"}})
 
   const setSpeedLevel = (value) => {
     setAnimationSpeed(value)
@@ -247,11 +247,27 @@ const Home = () => {
             >
               {
                 Object.keys(currentHanzi.details).map((detail) => {
+                  console.log(detail)
                   return(
+                    detail.includes("audio") ? null :
                     <Panel header={detail[0].toUpperCase() + detail.slice(1)} key={detail} extra={report(currentHanzi)}>
-                      <div style={{ textAlign: 'start' }}>
-                        {currentHanzi.details[detail]}
-                      </div>
+                      <Row style={{ display: "flex", justifyContent: "start", alignItems: "center", textAlign: "start" }}>
+                        <Col>
+                          {currentHanzi.details[detail]}
+                        </Col>
+                        {detail === "pinyin" && currentHanzi.details[detail] !== "" && currentHanzi.details["pinyin_audio"] !== "" ?
+                          <Col offset={2} span={18}>
+                            <Row>
+                              <Col>
+                                <SoundFilled onClick={() => new Audio(currentHanzi.details["pinyin_audio"]).play()} style={{ color: "#1890ff" }} />
+                              </Col>
+                              <Col offset={1}>
+                                (source: <a href="http://shtooka.net/">Shtooka</a>)
+                              </Col>
+                            </Row>
+                          </Col>
+                        : null}
+                      </Row>
                     </Panel>
                   )
                 })
