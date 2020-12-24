@@ -211,7 +211,7 @@ const Home = () => {
       </AutoComplete>
       <Row gutter={16} style={{ padding: 15 }}>
         <Col lg={{ span: 4, offset: 10 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }}>
-            <Button type="primary" onClick={() => setIsModalVisible(true)}>Browse all characters</Button>
+          <Button type="primary" onClick={() => setIsModalVisible(true)}>Browse all characters</Button>
         </Col>
       </Row>
       <Modal title="All Chinese characters" visible={isModalVisible} footer={null} onCancel={() => setIsModalVisible(false)} width={window.innerWidth * 0.8} bodyStyle={{ height: window.innerHeight * 0.5, overflow: "auto" }}>
