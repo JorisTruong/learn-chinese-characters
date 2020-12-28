@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react"
-import { Typography, Statistic, Button, Input, Progress, Row, Col } from "antd"
+import { Typography, Card, Statistic, Button, Input, Progress, Row, Col } from "antd"
 
 import useInterval from "./hooks/useInterval"
 
@@ -174,6 +174,18 @@ const RaceGame = () => {
           </Col>
           <Col lg={{ span: 4, offset: 10 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }}>
             <Button type="primary" disabled={isTimerActive} onClick={() => { hanzi.setCharacter(inputString[0]); _textPosition = 0; _strokeProgress = 0; setStrokeProgress(0); setReady(Date.now() + 1000 * 4); resetTimer() }} style={{ width: "100%" }}>Go</Button>
+          </Col>
+        </Row>
+        <Row gutter={16}>
+          <Col lg={{ span: 4, offset: 10 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }} style={{ paddingTop: 25 }}>
+            <Card>
+              <Statistic
+                title="Strokes per minute"
+                value={timeInMilliseconds === 0 ? 0 : 60 * 1000 * strokeProgress / timeInMilliseconds}
+                precision={0}
+                valueStyle={{ color: "#3f8600" }}
+              />
+            </Card>
           </Col>
         </Row>
       </div>
