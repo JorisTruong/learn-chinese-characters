@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import Helmet from "react-helmet"
 import { Link } from "gatsby"
 import { Typography, Layout, Menu, Row, Col } from "antd"
-import { HomeOutlined, HighlightOutlined, FieldTimeOutlined, RocketOutlined, TableOutlined } from "@ant-design/icons"
+import { HomeOutlined, HighlightOutlined, FieldTimeOutlined, RocketOutlined, TableOutlined, InfoCircleOutlined } from "@ant-design/icons"
 
 
 const { Header, Content, Footer, Sider } = Layout
@@ -37,6 +37,7 @@ const Skeleton = (props) => {
             <Menu.Item key="3" icon={<FieldTimeOutlined />} style={leftCollapsed ? {} : {whiteSpace: 'normal', height: 'auto'}}><Link to="/random">Random Character Game</Link></Menu.Item>
             <Menu.Item key="4" icon={<RocketOutlined />} style={leftCollapsed ? {} : {whiteSpace: 'normal', height: 'auto'}}><Link to="/race">Stroke Racer</Link></Menu.Item>
             <Menu.Item key="5" icon={<TableOutlined />} style={leftCollapsed ? {} : {whiteSpace: 'normal', height: 'auto'}}><Link to="/generate">Generate Word Sheet</Link></Menu.Item>
+            <Menu.Item key="6" icon={<InfoCircleOutlined />} style={leftCollapsed ? {} : {whiteSpace: 'normal', height: 'auto'}}><Link to="/about">About</Link></Menu.Item>
           </Menu>
         </Sider>
         <Layout className="site-layout">
