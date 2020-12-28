@@ -75,7 +75,7 @@ const InputText = () => {
 
   return (
     <div className="site-layout-background" style={{ padding: 24, textAlign: "center" }}>
-      <Row style={{ paddingBottom: 50 }}>
+      <Row style={{ paddingBottom: 25 }}>
         <Col lg={{ span: 12, offset: 6 }} md={{ span: 20, offset: 2 }} xs={{ span: 24 }}>
           <Typography>
             <Title level={5}>

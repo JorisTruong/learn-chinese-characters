@@ -120,14 +120,14 @@ const RaceGame = () => {
 
   return (
     <div className="site-layout-background" style={{ padding: 24, textAlign: "center" }}>
-      <Row style={{ paddingBottom: 50 }}>
+      <Row style={{ paddingBottom: 25 }}>
         <Col lg={{ span: 12, offset: 6 }} md={{ span: 20, offset: 2 }} xs={{ span: 24 }}>
           <Typography>
             <Title level={5}>
               Stroke Racer
             </Title>
             <Paragraph style={{ textAlign: "justify" }}>
-              The text input quiz allows you to focus on learning the stroke order of Chinese characters. Type your own text and quiz yourself word by word. You can re-quiz yourself on a word, go to the previous word or to the next word of your text.
+              In Stroke Racer, you will test your <i>handwriting</i> (digital) speed. You can generate a text a try to finish writing it down as fast as you can. You can also input your own text. Let's see who is the fastest Chinese character writer!
             </Paragraph>
           </Typography>
         </Col>
