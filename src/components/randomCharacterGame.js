@@ -234,26 +234,24 @@ const RandomGame = (props) => {
           )}
         </AutoSizer>
       </Modal>
-      
-          {
-            inputString.split("").map((char, i) => {
-              var rowSize = window.innerWidth < 576 ? 4 : window.innerWidth <= 768 ? 6 : 16
-              return i%rowSize === 0 ? inputString.split("").slice(i, i+rowSize) : null;
-            }).filter(function(e) { return e }).map((row) => {
-              return(
-                <Row gutter={[16, 8]} key={row}>
-                  <Col lg={{ span: 16, offset: 4 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }}>
-                    {
-                      row.map((char) => {
-                        return(<Tag key={char} closable onClose={() => setInputString(inputString.replace(char, ''))} style={{ display: "inline-flex", justifyContent: "center", alignItems: "center", fontSize: 20, height: "30px", width: "44px" }}>{char}</Tag>)
-                      })
-                    }
-                  </Col>
-                </Row>
-              )
-            })
-          }
-        
+        {
+          inputString.split("").map((char, i) => {
+            var rowSize = window.innerWidth < 576 ? 4 : window.innerWidth <= 768 ? 6 : 16
+            return i%rowSize === 0 ? inputString.split("").slice(i, i+rowSize) : null;
+          }).filter(function(e) { return e }).map((row) => {
+            return(
+              <Row gutter={[16, 8]} key={row}>
+                <Col lg={{ span: 16, offset: 4 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }}>
+                  {
+                    row.map((char) => {
+                      return(<Tag key={char} closable onClose={() => setInputString(inputString.replace(char, ''))} style={{ display: "inline-flex", justifyContent: "center", alignItems: "center", fontSize: 20, height: "30px", width: "44px" }}>{char}</Tag>)
+                    })
+                  }
+                </Col>
+              </Row>
+            )
+          })
+        }
       <div style={{ padding: 25}} >
         <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" ref={divRef}>
           <line x1="0" y1="0" x2="200" y2="200" stroke="#DDD" />
@@ -270,7 +268,19 @@ const RandomGame = (props) => {
       <div style={{ padding: 10 }}>
         <Row gutter={16}>
           <Col lg={{ span: 4, offset: 10 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }} style={{ paddingBottom: 15 }}>
-            <Countdown title="60-second timer" value={deadline} format="mm:ss:SSS" onFinish={() => {hanzi.cancelQuiz(); setFinished(true)}}/>
+            {
+              finished ?
+              <div className="ant-statistic">
+                <div className="ant-statistic-title">
+                  Timer
+                </div>
+                <div className="ant-statistic-content">
+                  <span className="ant-statistic-content-value">00:60:000</span>
+                </div>
+              </div> :
+              <Countdown title="Timer" value={deadline} format="mm:ss:SSS" onFinish={() => {hanzi.cancelQuiz(); setFinished(true)}} />
+            }
+            
           </Col>
           <Col lg={{ span: 4, offset: 10 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }}>
             <Button type="primary" disabled={!finished} onClick={() => {props.updateCorrectStrokes(0); props.updateMistakeStrokes(0); setReady(Date.now() + 1000 * 4)}} style={{ width: "100%" }}>Ready</Button>
