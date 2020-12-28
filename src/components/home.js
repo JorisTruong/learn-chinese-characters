@@ -47,7 +47,9 @@ const Home = () => {
   const [animationSpeed, setAnimationSpeed] = useState(1)
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [suggestions, setSuggestions] = useState([])
-  const [currentHanzi, setCurrentHanzi] = useState({"character": "\u5b66", "stroke_count": 16, "details": {"definition": "learning, knowledge, science; to study, to go to school; -ology", "pinyin": ["xu\u00e9"], "pinyin_audio": "http://packs.shtooka.net/cmn-caen-tan/ogg/cmn-e0256f02.ogg"}})
+  const [currentHanzi, setCurrentHanzi] = useState({"character": "學", "stroke_count": 16, "details": {"definition": "learning, knowledge, science; to study, to go to school; -ology", "pinyin": ["xu\u00e9"], "pinyin_audio": "http://packs.shtooka.net/cmn-caen-tan/ogg/cmn-e0256f02.ogg"}})
+  const [isReportModalVisible, setIsReportModalVisible] = useState(false)
+  const [reportDetails, setReportDetails] = useState({"character": "", "detail": ""})
 
   const setSpeedLevel = (value) => {
     setAnimationSpeed(value)
@@ -172,11 +174,12 @@ const Home = () => {
     }
   }
 
-  const report = () => (
+  const report = (currentHanzi, detail) => (
     <Tooltip title="Make a suggestion">
       <Button type="ghost" shape="circle" icon={<FlagOutlined />} onClick={event => {
         event.stopPropagation()
-        console.log(currentHanzi)
+        setIsReportModalVisible(true)
+        setReportDetails({"character": currentHanzi.character, "detail": detail[0].toUpperCase() + detail.slice(1)})
       }} />
     </Tooltip>
   );
@@ -193,7 +196,7 @@ const Home = () => {
               The goal of this website is to learn about how to write Chinese characters based on stroke order. You can choose traditional or simplified characters, get information on their definition, their pinyin pronunciation, and more! This website is meant to be collaborative and not Mandarin only. Feel free to submit pronunciations on your own Chinese dialect, so that people can learn more about your dialect!
             </Paragraph>
             <Paragraph style={{ textAlign: "justify" }}>
-              Search a Chinese character by typing it directly, or using pinyin. You can also browse all available Chinese characters in our data. See how to write them or you can even quiz yourself.
+              Search a Chinese character by typing it directly, or using pinyin. You can also browse all available Chinese characters in our data. See how to write them and you can even quiz yourself.
             </Paragraph>
           </Typography>
         </Col>
@@ -247,10 +250,9 @@ const Home = () => {
             >
               {
                 Object.keys(currentHanzi.details).map((detail) => {
-                  console.log(detail)
                   return(
                     detail.includes("audio") ? null :
-                    <Panel header={detail[0].toUpperCase() + detail.slice(1)} key={detail} extra={report(currentHanzi)}>
+                    <Panel header={detail[0].toUpperCase() + detail.slice(1)} key={detail} extra={report(currentHanzi, detail)}>
                       <Row style={{ display: "flex", justifyContent: "start", alignItems: "center", textAlign: "start" }}>
                         <Col>
                           {currentHanzi.details[detail]}
@@ -262,7 +264,7 @@ const Home = () => {
                                 <SoundFilled onClick={() => new Audio(currentHanzi.details["pinyin_audio"]).play()} style={{ color: "#1890ff" }} />
                               </Col>
                               <Col offset={1}>
-                                (source: <a href="http://shtooka.net/">Shtooka</a>)
+                                (source: <a href="http://shtooka.net/" target="_blank" rel="noreferrer">Shtooka</a>)
                               </Col>
                             </Row>
                           </Col>
@@ -273,6 +275,46 @@ const Home = () => {
                 })
               }
             </Collapse>
+              <Modal title={`Make a suggestion - ${reportDetails["detail"]} of ${reportDetails["character"]}`} visible={isReportModalVisible} footer={null} onCancel={() => setIsReportModalVisible(false)}>
+                <Row>
+                  <Col span={8}>
+                    <Row style={{ display: 'flex', width: "100%", justifyContent: "center", alignItems: "center", textAlign: "center" }}>
+                      <Col span={24}>
+                        <a href={`mailto:joris.truong@protonmail.com?subject=[Suggestion] ${reportDetails["character"]} - ${reportDetails["detail"]}`}>
+                          <img src={require("../images/protonmail.svg")} height="32px" width="32px" alt="protonmail"/>
+                        </a>
+                      </Col>
+                      <Col span={24}>
+                        Send an email
+                      </Col>
+                    </Row>
+                  </Col>
+                  <Col span={8}>
+                    <Row style={{ display: 'flex', width: "100%", justifyContent: "center", alignItems: "center", textAlign: "center" }}>
+                      <Col span={24}>
+                        <a href="https://codeberg.org/joristruong" target="_blank" rel="noreferrer">
+                          <img src={require("../images/codeberg.svg")} height="32px" width="32px" alt="codeberg"/>
+                        </a>
+                      </Col>
+                      <Col span={24}>
+                        Create a Codeberg issue
+                      </Col>
+                    </Row>
+                  </Col>
+                  <Col span={8}>
+                    <Row style={{ display: 'flex', width: "100%", justifyContent: "center", alignItems: "center", textAlign: "center" }}>
+                      <Col span={24}>
+                        <a href="https://github.com/JorisTruong" target="_blank" rel="noreferrer">
+                          <img src={require("../images/github.svg")} height="32px" width="32px" alt="github"/>
+                        </a>
+                      </Col>
+                      <Col span={24}>
+                        Create a Github issue
+                      </Col>
+                    </Row>
+                  </Col>
+                </Row>
+              </Modal>
           </Col>
         </Row>
       </div>
