@@ -127,7 +127,7 @@ const RaceGame = () => {
               Stroke Racer
             </Title>
             <Paragraph style={{ textAlign: "justify" }}>
-              In Stroke Racer, you will test your <i>handwriting</i> (digital) speed. You can generate a text a try to finish writing it down as fast as you can. You can also input your own text. Let's see who is the fastest Chinese character writer!
+              In Stroke Racer, you will test your <i>handwriting</i> (digital) speed. You can generate a text and try to finish writing it down as fast as you can. You can also input your own text. Let's see who is the fastest Chinese character writer!
             </Paragraph>
           </Typography>
         </Col>
