@@ -276,6 +276,11 @@ const Home = () => {
               }
             </Collapse>
               <Modal title={`Make a suggestion - ${reportDetails["detail"]} of ${reportDetails["character"]}`} visible={isReportModalVisible} footer={null} onCancel={() => setIsReportModalVisible(false)}>
+                <Row style={{ paddingBottom: 30 }}>
+                  <Col span={24}>
+                    <i>To make a suggestion about a definition or even an audio file for the pronunciation of your Chinese dialect, you can send me an email, or use Codeberg/Github issues if you are familiar with them. Note that currently, these suggestions will only be stored so that modifications can be make in the future. The current state of this website does not allow open contributions yet. For the tech-savvy, this is because this website is currently front-end only.</i>
+                  </Col>
+                </Row>
                 <Row>
                   <Col span={8}>
                     <Row style={{ display: 'flex', width: "100%", justifyContent: "center", alignItems: "center", textAlign: "center" }}>

@@ -5,7 +5,6 @@ module.exports = {
     description: "Learn Chinese Characters"
   },
   plugins: [
-    "gatsby-plugin-postcss",
     "gatsby-plugin-image",
     "gatsby-plugin-react-helmet",
     "gatsby-plugin-sharp",
@@ -13,10 +12,10 @@ module.exports = {
     {
       resolve: "gatsby-source-filesystem",
       options: {
-        name: "images",
-        path: "./src/images/",
+        name: "data",
+        path: `${__dirname}/src/resources/`,
       },
-      __key: "images",
+      __key: "data",
     },
     {
       resolve: `gatsby-plugin-manifest`,
