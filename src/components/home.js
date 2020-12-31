@@ -296,24 +296,24 @@ const Home = () => {
                   <Col span={8}>
                     <Row style={{ display: 'flex', width: "100%", justifyContent: "center", alignItems: "center", textAlign: "center" }}>
                       <Col span={24}>
-                        <a href="https://codeberg.org/joristruong" target="_blank" rel="noreferrer">
-                          <img src={require("../images/codeberg.svg")} height="32px" width="32px" alt="codeberg"/>
+                        <a href={`https://github.com/JorisTruong/learn-chinese-characters/issues/new?assignees=&labels=suggestion&template=suggestion.md&title=%5BSUGGESTION%5D+${reportDetails["character"]}+-+${reportDetails["detail"]}`} target="_blank" rel="noreferrer">
+                          <img src={require("../images/github.svg")} height="32px" width="32px" alt="github"/>
                         </a>
                       </Col>
                       <Col span={24}>
-                        Create a Codeberg issue
+                        Create a Github issue (with account)
                       </Col>
                     </Row>
                   </Col>
                   <Col span={8}>
                     <Row style={{ display: 'flex', width: "100%", justifyContent: "center", alignItems: "center", textAlign: "center" }}>
                       <Col span={24}>
-                        <a href="https://github.com/JorisTruong" target="_blank" rel="noreferrer">
-                          <img src={require("../images/github.svg")} height="32px" width="32px" alt="github"/>
+                        <a href={`https://gitreports.com/issue/JorisTruong/learn-chinese-characters?issue_title=[SUGGESTION] ${reportDetails["character"]} - ${reportDetails["detail"]}&details=Describe your suggestion here`} target="_blank" rel="noreferrer">
+                          <img src={require("../images/github.svg")} height="32px" width="32px" alt="github" style={{ opacity: 0.5 }}/>
                         </a>
                       </Col>
                       <Col span={24}>
-                        Create a Github issue
+                        Create a Github issue (without account)
                       </Col>
                     </Row>
                   </Col>
