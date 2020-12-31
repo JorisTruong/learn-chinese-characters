@@ -27,7 +27,7 @@ const AboutPage = () => {
               Learn Chinese Characters is a free and open-source website. The data comes from various sources, more precisely <a href="https://github.com/chanind/hanzi-writer-data" target="_blank" rel="noreferrer">Hanzi Writer Data</a>, <a href="https://github.com/skishore/makemeahanzi" target="_blank" rel="noreferrer">Make me a Hanzi</a>, <a href="http://shtooka.net/" target="_blank" rel="noreferrer">Shtooka</a>, <a href="https://pycantonese.org/" target="_blank" rel="noreferrer">PyCantonese</a>. The data can be found under the JSON format <a href={data.file.publicURL} target="_blank" rel="noreferrer">here</a>. Learn Chinese Characters makes no guarantee concerning the exact accuracy of the chinese characters definition, pinyin, stroke order or any other information.
             </Paragraph>
             <Paragraph style={{ textAlign: "justify" }}>
-              You can find the repository on <a href="https://codeberg.org/joristruong" target="_blank" rel="noreferrer">Codeberg</a> or on <a href="https://github.com/JorisTruong" target="_blank" rel="noreferrer">Github</a>. This website has been developed in React with the Ant Design library.
+              You can find the repository on <a href="https://codeberg.org/joristruong" target="_blank" rel="noreferrer">Codeberg</a> or on <a href="https://github.com/JorisTruong" target="_blank" rel="noreferrer">Github</a>. This website has been developed in React with the Ant Design library and the Gatsby framework.
             </Paragraph>
           </Typography>
         </Col>
