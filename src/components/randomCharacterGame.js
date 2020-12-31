@@ -12,8 +12,8 @@ const jsonQuery = require('json-query')
 const hanziData = require("../resources/hanzi.json")
 const hanziDataQuery = { "characters": hanziData }
 const hanziDataQueryPinyinSort = { "characters": hanziData.sort(function(a, b) {
-  var pinyinA = a.details.pinyin[0]
-  var pinyinB = b.details.pinyin[0]
+  var pinyinA = a.details.pinyin.value[0]
+  var pinyinB = b.details.pinyin.value[0]
   if (pinyinA == null || pinyinB == null) {
     return 0
   } else {
@@ -67,7 +67,7 @@ const RandomGame = (props) => {
 
   const helpers = {
     pinyinSearch: function(input, query) {
-      var normalizedPinyin = input.pinyin.map(element => element.normalize("NFD").replace(/[\u0300-\u036f]/g, ""))
+      var normalizedPinyin = input.value.map(element => element.normalize("NFD").replace(/[\u0300-\u036f]/g, ""))
       if (normalizedPinyin.find(element => element.startsWith(query.toLowerCase()))) {
         return input
       } else {
@@ -78,11 +78,11 @@ const RandomGame = (props) => {
 
   const searchResult = (query) => {
     var hanziQuery = jsonQuery(["characters[*character=?]", query], {data: hanziDataQuery})
-    var pinyinQuery = jsonQuery(["characters[*details][*:pinyinSearch(?)]", query], {data: hanziDataQueryPinyinSort, locals: helpers})
+    var pinyinQuery = jsonQuery(["characters[*details][*pinyin][*:pinyinSearch(?)]", query], {data: hanziDataQueryPinyinSort, locals: helpers})
     var result = hanziQuery.key.concat(pinyinQuery.key)
     if (hanziQuery.key.length === 1) {
-      var definition = hanziData[hanziQuery.key[0]].details.definition
-      var writingSystemQuery = jsonQuery(["characters[*details][*definition=?]", definition], {data: hanziDataQuery})
+      var definition = hanziData[hanziQuery.key[0]].details.definition.value
+      var writingSystemQuery = jsonQuery(["characters[*details][*definition][*value=?]", definition], {data: hanziDataQuery})
       result = Array.from(new Set(result.concat(writingSystemQuery.key)))
     }
     if (result == null) {
@@ -104,7 +104,7 @@ const RandomGame = (props) => {
                   {hanziData[item].character}
                 </span>
                 <span>
-                  {hanziData[item].details.pinyin}
+                  {hanziData[item].details.pinyin.value}
                 </span>
               </div>
             )

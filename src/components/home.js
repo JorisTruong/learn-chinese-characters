@@ -9,8 +9,8 @@ const jsonQuery = require('json-query')
 const hanziData = require("../resources/hanzi.json")
 const hanziDataQuery = { "characters": hanziData }
 const hanziDataQueryPinyinSort = { "characters": hanziData.sort(function(a, b) {
-  var pinyinA = a.details.pinyin[0]
-  var pinyinB = b.details.pinyin[0]
+  var pinyinA = a.details.pinyin.value[0]
+  var pinyinB = b.details.pinyin.value[0]
   if (pinyinA == null || pinyinB == null) {
     return 0
   } else {
@@ -47,7 +47,7 @@ const Home = () => {
   const [animationSpeed, setAnimationSpeed] = useState(1)
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [suggestions, setSuggestions] = useState([])
-  const [currentHanzi, setCurrentHanzi] = useState({"character": "學", "stroke_count": 16, "details": {"definition": "learning, knowledge, science; to study, to go to school; -ology", "pinyin": ["xu\u00e9"], "pinyin_audio": "http://packs.shtooka.net/cmn-caen-tan/ogg/cmn-e0256f02.ogg"}})
+  const [currentHanzi, setCurrentHanzi] = useState({"character": "學", "stroke_count": 16, "details": {"definition": {"value": "learning, knowledge, science; to study, to go to school; -ology", "source": "Make me a Hanzi"}, "pinyin": {"value": ["xu\u00e9"], "source": "Make me a Hanzi", "audio": "http://packs.shtooka.net/cmn-caen-tan/ogg/cmn-e0256f02.ogg", "audio_source": "Shtooka", "audio_source_url": "http://shtooka.net"}, "jyutping": {"value": "hok6", "source": "PyCantonese"}}})
   const [isReportModalVisible, setIsReportModalVisible] = useState(false)
   const [reportDetails, setReportDetails] = useState({"character": "", "detail": ""})
 
@@ -81,7 +81,7 @@ const Home = () => {
 
   const helpers = {
     pinyinSearch: function(input, query) {
-      var normalizedPinyin = input.pinyin.map(element => element.normalize("NFD").replace(/[\u0300-\u036f]/g, ""))
+      var normalizedPinyin = input.value.map(element => element.normalize("NFD").replace(/[\u0300-\u036f]/g, ""))
       if (normalizedPinyin.find(element => element.startsWith(query.toLowerCase()))) {
         return input
       } else {
@@ -92,11 +92,11 @@ const Home = () => {
 
   const searchResult = (query) => {
     var hanziQuery = jsonQuery(["characters[*character=?]", query], {data: hanziDataQuery})
-    var pinyinQuery = jsonQuery(["characters[*details][*:pinyinSearch(?)]", query], {data: hanziDataQueryPinyinSort, locals: helpers})
+    var pinyinQuery = jsonQuery(["characters[*details][*pinyin][*:pinyinSearch(?)]", query], {data: hanziDataQueryPinyinSort, locals: helpers})
     var result = hanziQuery.key.concat(pinyinQuery.key)
     if (hanziQuery.key.length === 1) {
-      var definition = hanziData[hanziQuery.key[0]].details.definition
-      var writingSystemQuery = jsonQuery(["characters[*details][*definition=?]", definition], {data: hanziDataQuery})
+      var definition = hanziData[hanziQuery.key[0]].details.definition.value
+      var writingSystemQuery = jsonQuery(["characters[*details][*definition][*value=?]", definition], {data: hanziDataQuery})
       result = Array.from(new Set(result.concat(writingSystemQuery.key)))
     }
     if (result == null) {
@@ -118,7 +118,7 @@ const Home = () => {
                   {hanziData[item].character}
                 </span>
                 <span>
-                  {hanziData[item].details.pinyin}
+                  {hanziData[item].details.pinyin.value}
                 </span>
               </div>
             )
@@ -251,20 +251,19 @@ const Home = () => {
               {
                 Object.keys(currentHanzi.details).map((detail) => {
                   return(
-                    detail.includes("audio") ? null :
                     <Panel header={detail[0].toUpperCase() + detail.slice(1)} key={detail} extra={report(currentHanzi, detail)}>
                       <Row style={{ display: "flex", justifyContent: "start", alignItems: "center", textAlign: "start" }}>
                         <Col>
-                          {currentHanzi.details[detail]}
+                          {currentHanzi.details[detail]["value"]}
                         </Col>
-                        {detail === "pinyin" && currentHanzi.details[detail] !== "" && currentHanzi.details["pinyin_audio"] !== "" ?
+                        {currentHanzi.details[detail].hasOwnProperty("audio") && currentHanzi.details[detail]["audio"] !== "" ?
                           <Col offset={2} span={18}>
                             <Row>
                               <Col>
-                                <SoundFilled onClick={() => new Audio(currentHanzi.details["pinyin_audio"]).play()} style={{ color: "#1890ff" }} />
+                                <SoundFilled onClick={() => new Audio(currentHanzi.details[detail]["audio"]).play()} style={{ color: "#1890ff" }} />
                               </Col>
                               <Col offset={1}>
-                                (source: <a href="http://shtooka.net/" target="_blank" rel="noreferrer">Shtooka</a>)
+                                (source: <a href={currentHanzi.details[detail]["audio_source_url"]} target="_blank" rel="noreferrer">{currentHanzi.details[detail]["audio_source"]}</a>)
                               </Col>
                             </Row>
                           </Col>
