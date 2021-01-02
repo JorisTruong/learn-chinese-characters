@@ -4,7 +4,7 @@ import { Typography, Card, Statistic, Button, Input, Progress, Row, Col } from "
 import useInterval from "./hooks/useInterval"
 
 const HanziWriter = require("hanzi-writer")
-const jsonQuery = require('json-query')
+const jsonQuery = require("json-query")
 
 const hanziData = require("../resources/hanzi.json")
 const hanziDataQuery = { "characters": hanziData }
@@ -28,7 +28,7 @@ const RaceGame = () => {
         showOutline: true,
         showHintAfterMisses: false,
         onLoadCharDataError: function(reason) {
-          console.log('Oh No! Something went wrong :(')
+          console.log("Oh No! Something went wrong :(")
         }
       })
     }
@@ -40,8 +40,8 @@ const RaceGame = () => {
   const [isTimerActive, setIsTimerActive] = useState(false)
   const [prevTime, setPrevTime] = useState(null)
   const [timeInMilliseconds, setTimeInMilliseconds] = useState(0)
-  const [inputString, setInputString] = useState('')
-  const [filteredInputString, setFilteredInputString] = useState('')
+  const [inputString, setInputString] = useState("")
+  const [filteredInputString, setFilteredInputString] = useState("")
   const [totalStrokes, setTotalStrokes] = useState(0)
   const [strokeProgress, setStrokeProgress] = useState(0)
   const [ready, setReady] = useState(null)
@@ -58,7 +58,7 @@ const RaceGame = () => {
   );
 
   const updateInput = () => {
-    var totalStrokesCount = filteredInputString.split('').map((char) => {
+    var totalStrokesCount = filteredInputString.split("").map((char) => {
       var hanziQuery = jsonQuery(["characters[*character=?]", char], {data: hanziDataQuery})
       if (hanziQuery.key.length === 1) {
         return hanziData[hanziQuery.key[0]]["stroke_count"]
@@ -67,7 +67,7 @@ const RaceGame = () => {
       }
     }).reduce((a, b) => a + b, 0)
     setTotalStrokes(totalStrokesCount)
-    if (filteredInputString !== '') {
+    if (filteredInputString !== "") {
       hanzi.setCharacter(filteredInputString[0])
       _textPosition = 0
     }
@@ -127,7 +127,7 @@ const RaceGame = () => {
               Stroke Racer
             </Title>
             <Paragraph style={{ textAlign: "justify" }}>
-              In Stroke Racer, you will test your <i>handwriting</i> (digital) speed. You can generate a text and try to finish writing it down as fast as you can. You can also input your own text. Let's see who is the fastest Chinese character writer!
+              In Stroke Racer, you will test your <i>handwriting</i> (digital) speed. You can generate a text and try to finish writing it down as fast as you can. You can also input your own text. Let"s see who is the fastest Chinese character writer!
             </Paragraph>
           </Typography>
         </Col>

@@ -15,9 +15,8 @@ const Skeleton = (props) => {
   return (
     <div>
       <Helmet title="Learn Chinese Characters">
-
       </Helmet>
-      <Layout style={{ minHeight: '100vh' }}>
+      <Layout style={{ minHeight: "100vh" }}>
         <Sider
           collapsible collapsed={leftCollapsed} onCollapse={() => setLeftCollapse(!leftCollapsed)}
           collapsedWidth={window.innerWidth < window.innerHeight && leftCollapsed ? "0" : Sider.defaultProps}
@@ -32,12 +31,12 @@ const Skeleton = (props) => {
         >
           <div className="logo" />
           <Menu theme="dark" mode="inline" defaultSelectedKeys={[props.index]}>
-            <Menu.Item key="1" icon={<HomeOutlined />} style={leftCollapsed ? {} : {whiteSpace: 'normal', height: 'auto'}}><Link to="/">Home</Link></Menu.Item>
-            <Menu.Item key="2" icon={<HighlightOutlined />} style={leftCollapsed ? {} : {whiteSpace: 'normal', height: 'auto'}}><Link to="/textQuiz">Text Quiz</Link></Menu.Item>
-            <Menu.Item key="3" icon={<FieldTimeOutlined />} style={leftCollapsed ? {} : {whiteSpace: 'normal', height: 'auto'}}><Link to="/random">Random Character Game</Link></Menu.Item>
-            <Menu.Item key="4" icon={<RocketOutlined />} style={leftCollapsed ? {} : {whiteSpace: 'normal', height: 'auto'}}><Link to="/race">Stroke Racer</Link></Menu.Item>
-            <Menu.Item key="5" icon={<TableOutlined />} style={leftCollapsed ? {} : {whiteSpace: 'normal', height: 'auto'}}><Link to="/generate">Generate Word Sheet</Link></Menu.Item>
-            <Menu.Item key="6" icon={<InfoCircleOutlined />} style={leftCollapsed ? {} : {whiteSpace: 'normal', height: 'auto'}}><Link to="/about">About</Link></Menu.Item>
+            <Menu.Item key="1" icon={<HomeOutlined />} style={leftCollapsed ? {} : {whiteSpace: "normal", height: "auto"}}><Link to="/">Home</Link></Menu.Item>
+            <Menu.Item key="2" icon={<HighlightOutlined />} style={leftCollapsed ? {} : {whiteSpace: "normal", height: "auto"}}><Link to="/textQuiz">Text Quiz</Link></Menu.Item>
+            <Menu.Item key="3" icon={<FieldTimeOutlined />} style={leftCollapsed ? {} : {whiteSpace: "normal", height: "auto"}}><Link to="/random">Random Character Game</Link></Menu.Item>
+            <Menu.Item key="4" icon={<RocketOutlined />} style={leftCollapsed ? {} : {whiteSpace: "normal", height: "auto"}}><Link to="/race">Stroke Racer</Link></Menu.Item>
+            <Menu.Item key="5" icon={<TableOutlined />} style={leftCollapsed ? {} : {whiteSpace: "normal", height: "auto"}}><Link to="/generate">Generate Word Sheet</Link></Menu.Item>
+            <Menu.Item key="6" icon={<InfoCircleOutlined />} style={leftCollapsed ? {} : {whiteSpace: "normal", height: "auto"}}><Link to="/about">About</Link></Menu.Item>
           </Menu>
         </Sider>
         <Layout className="site-layout">
@@ -61,28 +60,28 @@ const Skeleton = (props) => {
             </div>
             <Row>
               <Col lg={{ span: 1, offset: 10 }} md={{ span: 2, offset: 8 }} xs={{ span: 4, offset: 4 }}>
-                <div style={{ display: 'flex', width: "100%", justifyContent: "center", alignItems: "center" }}>
+                <div style={{ display: "flex", width: "100%", justifyContent: "center", alignItems: "center" }}>
                   <a href="mailto:joris.truong@protonmail.com">
                     <img src={require("../images/protonmail.svg")} height="32px" width="32px" alt="protonmail"/>
                   </a>
                 </div>
               </Col>
               <Col lg={1} md={2} xs={4}>
-                <div style={{ display: 'flex', width: "100%", justifyContent: "center", alignItems: "center" }}>
+                <div style={{ display: "flex", width: "100%", justifyContent: "center", alignItems: "center" }}>
                   <a href="https://codeberg.org/joristruong" target="_blank" rel="noreferrer">
                     <img src={require("../images/codeberg.svg")} height="32px" width="32px" alt="codeberg"/>
                   </a>
                 </div>
               </Col>
               <Col lg={1} md={2} xs={4}>
-                <div style={{ display: 'flex', width: "100%", justifyContent: "center", alignItems: "center" }}>
+                <div style={{ display: "flex", width: "100%", justifyContent: "center", alignItems: "center" }}>
                   <a href="https://github.com/JorisTruong" target="_blank" rel="noreferrer">
                     <img src={require("../images/github.svg")} height="32px" width="32px" alt="github"/>
                   </a>
                 </div>
               </Col>
               <Col lg={1} md={2} xs={4}>
-                <div style={{ display: 'flex', width: "100%", justifyContent: "center", alignItems: "center" }}>
+                <div style={{ display: "flex", width: "100%", justifyContent: "center", alignItems: "center" }}>
                   <a href="https://www.linkedin.com/in/joris-truong-35a383131/" target="_blank" rel="noreferrer">
                     <img src={require("../images/linkedin.svg")} height="32px" width="32px" alt="linkedin"/>
                   </a>

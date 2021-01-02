@@ -4,7 +4,7 @@ import { FlagOutlined, SoundFilled } from "@ant-design/icons"
 import { AutoSizer, Collection } from "react-virtualized"
 
 const HanziWriter = require("hanzi-writer")
-const jsonQuery = require('json-query')
+const jsonQuery = require("json-query")
 
 const hanziData = require("../resources/hanzi.json")
 const hanziDataQuery = { "characters": hanziData }
@@ -30,7 +30,7 @@ const Home = () => {
   const divRef = useRef()
   useEffect(() => {
     if (hanzi == null) {
-      hanzi = HanziWriter.create(divRef.current, '學', {
+      hanzi = HanziWriter.create(divRef.current, "學", {
         width: 200,
         height: 200,
         padding: 5,
@@ -110,8 +110,8 @@ const Home = () => {
             label: (
               <div
                 style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
+                  display: "flex",
+                  justifyContent: "space-between",
                 }}
               >
                 <span>
@@ -132,8 +132,8 @@ const Home = () => {
       hanzi.setCharacter(value)
       setCurrentHanzi(obj)
     } else {
-      if (value !== '') {
-        var hanziQuery = jsonQuery(['characters[*character=?]', value], {data: hanziDataQuery})
+      if (value !== "") {
+        var hanziQuery = jsonQuery(["characters[*character=?]", value], {data: hanziDataQuery})
         if (hanziQuery.key.length === 1) {
           var foundHanzi = hanziData[hanziQuery.key[0]]
           hanzi.setCharacter(foundHanzi.character)
@@ -282,7 +282,7 @@ const Home = () => {
                 </Row>
                 <Row>
                   <Col span={8}>
-                    <Row style={{ display: 'flex', width: "100%", justifyContent: "center", alignItems: "center", textAlign: "center" }}>
+                    <Row style={{ display: "flex", width: "100%", justifyContent: "center", alignItems: "center", textAlign: "center" }}>
                       <Col span={24}>
                         <a href={`mailto:joris.truong@protonmail.com?subject=[Suggestion] ${reportDetails["character"]} - ${reportDetails["detail"]}`}>
                           <img src={require("../images/protonmail.svg")} height="32px" width="32px" alt="protonmail"/>
@@ -294,7 +294,7 @@ const Home = () => {
                     </Row>
                   </Col>
                   <Col span={8}>
-                    <Row style={{ display: 'flex', width: "100%", justifyContent: "center", alignItems: "center", textAlign: "center" }}>
+                    <Row style={{ display: "flex", width: "100%", justifyContent: "center", alignItems: "center", textAlign: "center" }}>
                       <Col span={24}>
                         <a href={`https://github.com/JorisTruong/learn-chinese-characters/issues/new?assignees=&labels=suggestion&template=suggestion.md&title=%5BSUGGESTION%5D+${reportDetails["character"]}+-+${reportDetails["detail"]}`} target="_blank" rel="noreferrer">
                           <img src={require("../images/github.svg")} height="32px" width="32px" alt="github"/>
@@ -306,7 +306,7 @@ const Home = () => {
                     </Row>
                   </Col>
                   <Col span={8}>
-                    <Row style={{ display: 'flex', width: "100%", justifyContent: "center", alignItems: "center", textAlign: "center" }}>
+                    <Row style={{ display: "flex", width: "100%", justifyContent: "center", alignItems: "center", textAlign: "center" }}>
                       <Col span={24}>
                         <a href={`https://gitreports.com/issue/JorisTruong/learn-chinese-characters?issue_title=[SUGGESTION] ${reportDetails["character"]} - ${reportDetails["detail"]}&details=Describe your suggestion here`} target="_blank" rel="noreferrer">
                           <img src={require("../images/github.svg")} height="32px" width="32px" alt="github" style={{ opacity: 0.5 }}/>

@@ -7,7 +7,7 @@ import { updateCorrectStrokes, updateMistakeStrokes, updateCorrectChar, updatePr
 
 
 const HanziWriter = require("hanzi-writer")
-const jsonQuery = require('json-query')
+const jsonQuery = require("json-query")
 
 const hanziData = require("../resources/hanzi.json")
 const hanziDataQuery = { "characters": hanziData }
@@ -44,7 +44,7 @@ const RandomGame = (props) => {
         showOutline: true,
         showHintAfterMisses: false,
         onLoadCharDataError: function(reason) {
-          console.log('Oh No! Something went wrong :(')
+          console.log("Oh No! Something went wrong :(")
         }
       })
     }
@@ -96,8 +96,8 @@ const RandomGame = (props) => {
             label: (
               <div
                 style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
+                  display: "flex",
+                  justifyContent: "space-between",
                 }}
               >
                 <span>
@@ -123,7 +123,7 @@ const RandomGame = (props) => {
     return (
       <Button key={key} style={style} type={inputString.includes(c) ? "primary" : "ghost"} onClick={() => {
         if (inputString.includes(c)) {
-          setInputString(inputString.replace(c, ''))
+          setInputString(inputString.replace(c, ""))
         } else {
           setInputString(inputString.concat(c))
         }
@@ -244,7 +244,7 @@ const RandomGame = (props) => {
                 <Col lg={{ span: 16, offset: 4 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }}>
                   {
                     row.map((char) => {
-                      return(<Tag key={char} closable onClose={() => setInputString(inputString.replace(char, ''))} style={{ display: "inline-flex", justifyContent: "center", alignItems: "center", fontSize: 20, height: "30px", width: "44px" }}>{char}</Tag>)
+                      return(<Tag key={char} closable onClose={() => setInputString(inputString.replace(char, ""))} style={{ display: "inline-flex", justifyContent: "center", alignItems: "center", fontSize: 20, height: "30px", width: "44px" }}>{char}</Tag>)
                     })
                   }
                 </Col>

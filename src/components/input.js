@@ -23,7 +23,7 @@ const InputText = () => {
         showOutline: true,
         showHintAfterMisses: false,
         onLoadCharDataError: function(reason) {
-          console.log('Oh No! Something went wrong :(')
+          console.log("Oh No! Something went wrong :(")
         }
       })
     }
@@ -32,9 +32,9 @@ const InputText = () => {
     }
   }, [])
 
-  const [inputString, setInputString] = useState('')
-  const [filteredInputString, setFilteredInputString] = useState('')
-  const [savedInput, setSavedInput] = useState('')
+  const [inputString, setInputString] = useState("")
+  const [filteredInputString, setFilteredInputString] = useState("")
+  const [savedInput, setSavedInput] = useState("")
   const [textPosition, setTextPosition] = useState(null)
 
   const writerOptions = {
@@ -47,7 +47,7 @@ const InputText = () => {
   }
 
   const updateInput = () => {
-    if (filteredInputString !== '') {
+    if (filteredInputString !== "") {
       setSavedInput(filteredInputString)
       hanzi.setCharacter(filteredInputString[0])
       setTextPosition(0)
