@@ -14,7 +14,6 @@
     "serve": "gatsby serve",
     "clean": "gatsby clean"
   },
-  "license": "0BSD",
   "dependencies": {
     "antd": "^4.9.2",
     "gatsby": "^2.26.1",
@@ -28,12 +27,14 @@
     "gatsby-transformer-sharp": "^2.8.0",
     "hanzi-writer": "^2.3.0",
     "json-query": "^2.2.2",
+    "jspdf": "^2.2.0",
     "postcss": "^8.2.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-helmet": "^6.1.0",
     "react-redux": "^7.2.2",
     "react-virtualized": "^9.22.2",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "svg2pdf.js": "^2.1.0"
   }
 }
