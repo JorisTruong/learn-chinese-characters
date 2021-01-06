@@ -141,6 +141,9 @@ const GenerateOptions = () => {
             <Paragraph style={{ textAlign: "justify" }}>
               Learning chinese characters stroke order is cool and all... But don"t you ever want to go back to the roots? You can generate word sheet to print for handwriting practice here. The word sheets are customizable: you can choose to get stroke order help, change the writing direction to left-to-right or top-to-bottom, select the number of lines... Whatever your level is, you can generate word sheets that correpond to you! (Do not forget to save the forests.)
             </Paragraph>
+            <Paragraph>
+              In a full page of generated word sheet, a horizontal line contains 10 boxes and a vertical line contains 14 boxes. Stroke fanning (which means each stroke portion will be displayed cumalatively) will always appear before character placeholder (full stroke help). The number of lines will always prevail, so make sure that you get enough lines to display the number of stroke fanning help and character placeholder help you choose!
+            </Paragraph>
           </Typography>
         </Col>
       </Row>
