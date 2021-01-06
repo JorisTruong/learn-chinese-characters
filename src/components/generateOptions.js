@@ -2,11 +2,10 @@ import React, { useState } from "react"
 import { Card, Input, AutoComplete, Modal, Button, Typography, InputNumber, Select, Row, Col } from "antd"
 import { PlusOutlined, MinusOutlined } from "@ant-design/icons"
 import { AutoSizer, Collection } from "react-virtualized"
-import { jsPDF } from "jspdf"
-import "svg2pdf.js"
+
+import { generateWordSheet } from "../utils/wordSheetGeneration.js"
 
 
-const HanziWriter = require("hanzi-writer")
 const jsonQuery = require("json-query")
 
 const hanziData = require("../resources/hanzi.json")
@@ -294,67 +293,7 @@ const GenerateOptions = () => {
       <Row style={{ textAlign: "center" }} gutter={[16, 16]}>
         <Col lg={{ span: 2, offset: 11 }} md={{ span: 6, offset: 4 }} xs={{ span: 9 }}>
           <Button type="primary" style={{ width: "100%" }} onClick={() => {
-            var target = document.createElement("target");
-            var svgText = `<svg width="210mm" height="297mm">`
-            for (var i = 0; i < lines.reduce((a, b) => a + b); i++) {
-              svgText = svgText + horizontalLineCharacterBackground(i)
-            }
-            var position = 0
-            var startX = 25
-            var startY = 95
-            var promises = []
-            inputs.forEach((input, index) => {
-              promises.push(
-                HanziWriter.loadCharacterData(input).then(function(charData) {
-                  var i = 0 // iterator for each fanning
-                  svgText = `${svgText} ${renderFanningStrokes(startX, startY, charData.strokes, true)}`
-                  startX = startX + 75
-                  position = position + 1
-                  i = i + 1
-                  for (var j = 0; j < fannings[index]; j++) { // j is an iterator for number of times of fanning help
-                    while (i <= charData.strokes.length && position < 10 * lines[index]) {
-                      var strokesPortion = charData.strokes.slice(0, i);
-                      if (startX === 775) {
-                        startX = 25
-                        startY = startY + 75
-                      }
-                      svgText = `${svgText} ${renderFanningStrokes(startX, startY, strokesPortion, false)}`
-                      startX = startX + 75
-                      position = position + 1
-                      i = i + 1
-                    }
-                    i = 1
-                  }
-                  var k = 0 // iterator for number of times of placeholder help
-                  while (k < placeholders[index] && position < 10 * lines[index]) {
-                    if (startX === 775) {
-                      startX = 25
-                      startY = startY + 75
-                    }
-                    svgText = `${svgText} ${renderFanningStrokes(startX, startY, charData.strokes, false)}`
-                    startX = startX + 75
-                    position = position + 1
-                    k = k + 1
-                  }
-                }).then(() => {
-                  startX = 25
-                  startY = startY + 75
-                  position = 0
-                })
-              )
-            })
-            Promise.all(promises).then(() => {
-              target.innerHTML = svgText + "</svg>"
-              const svgElement = target.firstElementChild
-              svgElement.getBoundingClientRect()
-              const width = svgElement.width.baseVal.value
-              const height = svgElement.height.baseVal.value
-              const pdf = new jsPDF(width > height ? "l" : "p", "pt", [width, height])
-              pdf.svg(svgElement, { width, height })
-                .then(() => {
-                  pdf.save("practice.pdf")
-                })
-            })
+            generateWordSheet(inputs, fannings, placeholders, lines, direction)
           }}>Generate</Button>
         </Col>
       </Row>
@@ -368,6 +307,7 @@ const GenerateOptions = () => {
               <Select
                 style={{ width: "100%" }}
                 defaultValue="ltr"
+                disabled={true} // TOCHANGE
                 onChange={(value) => {
                   setDirection(value)
                 }}
@@ -382,62 +322,5 @@ const GenerateOptions = () => {
     </div>
   )
 }
-
-function renderFanningStrokes(startX, startY, strokes, start) {
-  var group = document.createElementNS("http://www.w3.org/2000/svg", "g");
-
-  // set the transform property on the g element so the character renders at 75x75
-  var transformData = HanziWriter.getScalingTransform(75, 75);
-  group.setAttributeNS(null, "transform", `translate(${startX}, ${startY}) scale(${transformData.scale}, -${transformData.scale})`);
-
-  strokes.forEach(function(strokePath) {
-    var path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    path.setAttributeNS(null, "d", strokePath);
-    // style the character paths
-    path.style.fill = start ? "#555" : "#DDD";
-    group.appendChild(path);
-  });
-
-  return group.outerHTML;
-}
-
-// Max line is 13
-function horizontalLineCharacterBackground(line) {
-  var background = ""
-  for (var i = 0; i < 10; i++) {
-    background = background +
-    `
-      <line x1="${(25 + 75 * i)}" y1="${(30 + 75 * line)}" x2="${(100 + 75 * i)}" y2="${(105 + 75 * line)}" stroke="#DDD" />
-      <line x1="${(100 + 75 * i)}" y1="${(30 + 75 * line)}" x2="${(25 + 75 * i)}" y2="${(105 + 75 * line)}" stroke="#DDD" />
-      <line x1="${(62.5 + 75 * i)}" y1="${(30 + 75 * line)}" x2="${(62.5 + 75 * i)}" y2="${(105 + 75 * line)}" stroke="#DDD" />
-      <line x1="${(25 + 75 * i)}" y1="${(67.5 + 75 * line)}" x2="${(100 + 75 * i)}" y2="${(67.5 + 75 * line)}" stroke="#DDD" />
-      <line x1="${(25 + 75 * i)}" y1="${(30 + 75 * line)}" x2="${(100 + 75 * i)}" y2="${(30 + 75 * line)}" stroke="#555" />
-      <line x1="${(25 + 75 * i)}" y1="${(30 + 75 * line)}" x2="${(25 + 75 * i)}" y2="${(105 + 75 * line)}" stroke="#555" />
-      <line x1="${(25 + 75 * i)}" y1="${(105 + 75 * line)}" x2="${(100 + 75 * i)}" y2="${(105 + 75 * line)}" stroke="#555" />
-      <line x1="${(100 + 75 * i)}" y1="${(30 + 75 * line)}" x2="${(100 + 75 * i)}" y2="${(105 + 75 * line)}" stroke="#555" />
-    `
-  }
-  return background
-}
-
-// Max line is 9
-function verticalLineCharacterBackground(line) {
-  var background = ""
-  for (var i = 0; i < 14; i++) {
-    background = background +
-    `
-      <line x1="${700 - 75 * line}" y1="${30 + 75 * i}" x2="${775 - 75 * line}" y2="${105 + 75 * i}" stroke="#DDD" />
-      <line x1="${775 - 75 * line}" y1="${30 + 75 * i}" x2="${700 - 75 * line}" y2="${105 + 75 * i}" stroke="#DDD" />
-      <line x1="${737.5 - 75 * line}" y1="${30 + 75 * i}" x2="${737.5 - 75 * line}" y2="${105 + 75 * i}" stroke="#DDD" />
-      <line x1="${700 - 75 * line}" y1="${67.5 + 75 * i}" x2="${775 - 75 * line}" y2="${67.5 + 75 * i}" stroke="#DDD" />
-      <line x1="${700 - 75 * line}" y1="${30 + 75 * i}" x2="${775 - 75 * line}" y2="${30 + 75 * i}" stroke="#555" />
-      <line x1="${700 - 75 * line}" y1="${30 + 75 * i}" x2="${700 - 75 * line}" y2="${105 + 75 * i}" stroke="#555" />
-      <line x1="${700 - 75 * line}" y1="${105 + 75 * i}" x2="${775 - 75 * line}" y2="${105 + 75 * i}" stroke="#555" />
-      <line x1="${775 - 75 * line}" y1="${30 + 75 * i}" x2="${775 - 75 * line}" y2="${105 + 75 * i}" stroke="#555" />
-    `
-  }
-  return background
-}
-      
 
 export default GenerateOptions
