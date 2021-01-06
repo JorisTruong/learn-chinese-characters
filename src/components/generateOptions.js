@@ -293,7 +293,9 @@ const GenerateOptions = () => {
       <Row style={{ textAlign: "center" }} gutter={[16, 16]}>
         <Col lg={{ span: 2, offset: 11 }} md={{ span: 6, offset: 4 }} xs={{ span: 9 }}>
           <Button type="primary" style={{ width: "100%" }} onClick={() => {
-            generateWordSheet(inputs, fannings, placeholders, lines, direction)
+            if (inputs.some((element) => element !== "")) {
+              generateWordSheet(inputs, fannings, placeholders, lines, direction)
+            }
           }}>Generate</Button>
         </Col>
       </Row>

@@ -66,33 +66,62 @@ export function generateWordSheet(inputs, fannings, placeholders, lines, directi
   var currentLine = 0 // control the current line to know to write on which page
   var usedBoxCounter = 0 // control the number of used boxes for the character to not go over the defined number of lines
   // Create the characters boxes
-  for (var i = 0; i < lines.reduce((a, b) => a + b); i++) {
-    if (svgText[(i / 14) >> 0] === undefined) {
-      svgText[(i / 14) >> 0] = "" + horizontalLineCharacterBackground(i % 14)
+  var numberOfLines = 0
+  for (var i = 0; i < lines.length; i++) {
+    if (inputs[i] !== "") {
+      numberOfLines = numberOfLines + lines[i]
+    }
+  }
+  for (var j = 0; j < numberOfLines; j++) {
+    if (svgText[(j / 14) >> 0] === undefined) {
+      svgText[(j / 14) >> 0] = "" + horizontalLineCharacterBackground(j % 14)
     } else {
-      svgText[(i / 14) >> 0] = svgText[(i / 14) >> 0] + horizontalLineCharacterBackground(i % 14)
+      svgText[(j / 14) >> 0] = svgText[(j / 14) >> 0] + horizontalLineCharacterBackground(j % 14)
     }
   }
 
   var promises = [] // used to draw character strokes
   inputs.forEach((input, index) => {
-    var usedLines = 1
-    promises.push(
-      HanziWriter.loadCharacterData(input).then(function(charData) {
-        svgText[(currentLine / 14) >> 0] = `${svgText[(currentLine / 14) >> 0]} ${renderFanningStrokes(startX, startY, charData.strokes, true)}` // first word full stroke
-        startX = startX + 75
-        usedBoxCounter = usedBoxCounter + 1
+    if (input !== "") {
+      var usedLines = 1
+      promises.push(
+        HanziWriter.loadCharacterData(input).then(function(charData) {
+          svgText[(currentLine / 14) >> 0] = `${svgText[(currentLine / 14) >> 0]} ${renderFanningStrokes(startX, startY, charData.strokes, true)}` // first word full stroke
+          startX = startX + 75
+          usedBoxCounter = usedBoxCounter + 1
 
-        /// Fannings
-        var i = 1 // iterator for stroke portion, starts at one to avoid empty box
-        var j = 0 // iterator for number of times of fanning help
-        while (j < fannings[index]) {
-          while (usedBoxCounter < 10 * lines[index] && i <= charData.strokes.length) {
-            var strokesPortion = charData.strokes.slice(0, i)
-            svgText[(currentLine / 14) >> 0] = `${svgText[(currentLine / 14) >> 0]} ${renderFanningStrokes(startX, startY, strokesPortion, false)}`
+          /// Fannings
+          var i = 1 // iterator for stroke portion, starts at one to avoid empty box
+          var j = 0 // iterator for number of times of fanning help
+          while (j < fannings[index]) {
+            while (usedBoxCounter < 10 * lines[index] && i <= charData.strokes.length) {
+              var strokesPortion = charData.strokes.slice(0, i)
+              svgText[(currentLine / 14) >> 0] = `${svgText[(currentLine / 14) >> 0]} ${renderFanningStrokes(startX, startY, strokesPortion, false)}`
+              startX = startX + 75
+              usedBoxCounter = usedBoxCounter + 1
+              i = i + 1
+              if (startX === 775) {
+                startX = 25
+                if (startY === 1070) {
+                  startY = 95
+                } else {
+                  startY = startY + 75
+                }
+                usedLines = usedLines + 1
+                currentLine = currentLine + 1
+              }
+            }
+            j = j + 1
+            i = 1
+          }
+
+          /// Placeholders
+          var k = 0 // Iterator for number of times of character placeholder help
+          while (k < placeholders[index] && usedBoxCounter < 10 * lines[index]) {
+            svgText[(currentLine / 14) >> 0] = `${svgText[(currentLine / 14) >> 0]} ${renderFanningStrokes(startX, startY, charData.strokes, false)}`
             startX = startX + 75
             usedBoxCounter = usedBoxCounter + 1
-            i = i + 1
+            k = k + 1
             if (startX === 775) {
               startX = 25
               if (startY === 1070) {
@@ -104,51 +133,30 @@ export function generateWordSheet(inputs, fannings, placeholders, lines, directi
               currentLine = currentLine + 1
             }
           }
-          j = j + 1
-          i = 1
-        }
-
-        /// Placeholders
-        var k = 0 // Iterator for number of times of character placeholder help
-        while (k < placeholders[index] && usedBoxCounter < 10 * lines[index]) {
-          svgText[(currentLine / 14) >> 0] = `${svgText[(currentLine / 14) >> 0]} ${renderFanningStrokes(startX, startY, charData.strokes, false)}`
-          startX = startX + 75
-          usedBoxCounter = usedBoxCounter + 1
-          k = k + 1
-          if (startX === 775) {
-            startX = 25
-            if (startY === 1070) {
-              startY = 95
-            } else {
-              startY = startY + 75
+        }).then(() => {
+          /// Number of lines
+          if (lines[index] === usedLines) {
+            startY = startY + 75
+          } else {
+            for (var i = 0; i < lines[index] - usedLines + 1; i++) {
+              if (startY === 1070) {
+                startY = 95
+              } else {
+                startY = startY + 75
+              }
             }
-            usedLines = usedLines + 1
-            currentLine = currentLine + 1
+            //startY = startY + 75 * (lines[index] - usedLines + 1)
           }
-        }
-      }).then(() => {
-        /// Number of lines
-        if (lines[index] === usedLines) {
-          startY = startY + 75
-        } else {
-          for (var i = 0; i < lines[index] - usedLines + 1; i++) {
-            if (startY === 1070) {
-              startY = 95
-            } else {
-              startY = startY + 75
-            }
-          }
-          //startY = startY + 75 * (lines[index] - usedLines + 1)
-        }
-        // if (startY > 1070) {
-        //   startY = 25 + startY % 1070
-        // }
-        currentLine = currentLine + (lines[index] - usedLines + 1)
+          // if (startY > 1070) {
+          //   startY = 25 + startY % 1070
+          // }
+          currentLine = currentLine + (lines[index] - usedLines + 1)
 
-        startX = 25 // New character
-        usedBoxCounter = 0
-      })
-    )
+          startX = 25 // New character
+          usedBoxCounter = 0
+        })
+      )
+    }
   })
 
   const pdf = new jsPDF("p", "pt", [793.7008056640625, 1122.519775390625])
