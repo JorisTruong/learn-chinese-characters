@@ -8,6 +8,10 @@ The goal of this website is to learn Chinese characters, especially how to write
 
 This website has been developed in React with the Ant Design library and the Gatsby framework.
 
+## Run
+
+To run this project, make sure you have `npm`. Install the Gatsby CLI with `npm install -g gatsby-cli` and run the project with `gatsby develop` or `npm run start`. You will find the project on http://localhost:8000.
+
 ## Dependencies
 
 * [Hanzi Writer](https://github.com/chanind/hanzi-writer)
@@ -16,3 +20,7 @@ This website has been developed in React with the Ant Design library and the Gat
 * [React Virtualized](https://github.com/bvaughn/react-virtualized)
 * [Git Reports](https://gitreports.com/)
 * [svg2pdf](https://github.com/yWorks/svg2pdf.js/)
+
+## License
+
+Learn Chinese Characters is released under the AGPL (Affero General Public License).
