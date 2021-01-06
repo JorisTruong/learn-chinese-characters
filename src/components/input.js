@@ -9,12 +9,16 @@ const { TextArea } = Input
 const { Title, Paragraph } = Typography
 
 var hanzi = null
+var width = null
+var height = null
 var _textPosition = null
 var _strokeNumber = null
 
 const InputText = () => {  
   const divRef = useRef()
   useEffect(() => {
+    width = window.innerWidth
+    height = window.innerHeight
     if (hanzi == null) {
       hanzi = new HanziWriter(divRef.current, {
         width: 200,
@@ -87,7 +91,7 @@ const InputText = () => {
           </Typography>
         </Col>
       </Row>
-      <TextArea placeholder="Type your text" style={{ width: window.innerWidth < window.innerHeight ? "75vw" : "50vw" }} rows={4} value={inputString} onChange={(value) => {setInputString(value.target.value); setFilteredInputString(value.target.value.split("").filter(char => /\p{Script=Han}/u.test(char)).join(""))}}/>
+      <TextArea placeholder="Type your text" style={{ width: width < height ? "75vw" : "50vw" }} rows={4} value={inputString} onChange={(value) => {setInputString(value.target.value); setFilteredInputString(value.target.value.split("").filter(char => /\p{Script=Han}/u.test(char)).join(""))}}/>
       <div style={{ padding: 10 }}>
         <Row gutter={16}>
           <Col lg={{ span: 4, offset: 10 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }}>

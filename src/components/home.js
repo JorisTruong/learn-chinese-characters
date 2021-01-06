@@ -25,10 +25,14 @@ const { Panel } = Collapse
 const { Paragraph, Text } = Typography
 
 var hanzi = null
+var width = null
+var height = null
 
 const Home = () => {
   const divRef = useRef()
   useEffect(() => {
+    width = window.innerWidth
+    height = window.innerHeight
     if (hanzi == null) {
       hanzi = HanziWriter.create(divRef.current, "學", {
         width: 200,
@@ -157,19 +161,19 @@ const Home = () => {
   }
   
   const cellSizeAndPositionGetter = ({ index }) => {
-    if (window.innerWidth > window.innerHeight) {
+    if (width > height) {
       return {
-        height: window.innerHeight * 0.08,
-        width: window.innerWidth * 0.08,
-        x: (window.innerWidth * 0.1 - 6) * (index % 8),
-        y: window.innerHeight * 0.1 * Math.floor(index / 8)
+        height: height * 0.08,
+        width: width * 0.08,
+        x: (width * 0.1 - 6) * (index % 8),
+        y: height * 0.1 * Math.floor(index / 8)
       }
     } else {
       return {
-        height: window.innerHeight * 0.1,
-        width: window.innerWidth * 0.1,
-        x: (window.innerWidth * 0.13 - 6) * (index % 6),
-        y: window.innerHeight * 0.13 * Math.floor(index / 6)
+        height: height * 0.1,
+        width: width * 0.1,
+        x: (width * 0.13 - 6) * (index % 6),
+        y: height * 0.13 * Math.floor(index / 6)
       }
     }
   }
@@ -202,22 +206,22 @@ const Home = () => {
         </Col>
       </Row>
       <AutoComplete
-        dropdownMatchSelectWidth={window.innerWidth < window.innerHeight ? "75vw" : "20vw"}
+        dropdownMatchSelectWidth={width < height ? "75vw" : "20vw"}
         style={{
-            width: window.innerWidth < window.innerHeight ? "75vw" : "20vw",
+            width: width < height ? "75vw" : "20vw",
         }}
         options={suggestions}
         onSearch={handleSearch}
         onSelect={(value) => setHanzi(value)}
       >
-        <Search placeholder="Search a Chinese Character" enterButton={"OK"} style={{ width: window.innerWidth < window.innerHeight ? "75vw" : "20vw" }} onSearch={(value) => setHanzi(value, null)} />
+        <Search placeholder="Search a Chinese Character" enterButton={"OK"} style={{ width: width < height ? "75vw" : "20vw" }} onSearch={(value) => setHanzi(value, null)} />
       </AutoComplete>
       <Row gutter={16} style={{ padding: 15 }}>
         <Col lg={{ span: 4, offset: 10 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }}>
           <Button type="primary" onClick={() => setIsModalVisible(true)}>Browse all characters</Button>
         </Col>
       </Row>
-      <Modal title="All Chinese characters" visible={isModalVisible} footer={null} onCancel={() => setIsModalVisible(false)} width={window.innerWidth * 0.8} bodyStyle={{ height: window.innerHeight * 0.5, overflow: "auto" }}>
+      <Modal title="All Chinese characters" visible={isModalVisible} footer={null} onCancel={() => setIsModalVisible(false)} width={width * 0.8} bodyStyle={{ height: height * 0.5, overflow: "auto" }}>
         <AutoSizer>
           {({ height, width }) => (
             <Collection

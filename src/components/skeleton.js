@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import Helmet from "react-helmet"
 import { Link } from "gatsby"
 import { Typography, Layout, Menu, Row, Col } from "antd"
@@ -8,9 +8,17 @@ import { HomeOutlined, HighlightOutlined, FieldTimeOutlined, RocketOutlined, Tab
 const { Header, Content, Footer, Sider } = Layout
 const { Title } = Typography
 
+var width = null
+var height = null
+
 const Skeleton = (props) => {  
 
-  const [leftCollapsed, setLeftCollapse] = useState(window.innerWidth < window.innerHeight ? true : false)
+  useEffect(() => {
+    width = window.innerWidth
+    height = window.innerHeight
+  }, [])
+
+  const [leftCollapsed, setLeftCollapse] = useState(width < height ? true : false)
 
   return (
     <div>
@@ -19,7 +27,7 @@ const Skeleton = (props) => {
       <Layout style={{ minHeight: "100vh" }}>
         <Sider
           collapsible collapsed={leftCollapsed} onCollapse={() => setLeftCollapse(!leftCollapsed)}
-          collapsedWidth={window.innerWidth < window.innerHeight && leftCollapsed ? "0" : Sider.defaultProps}
+          collapsedWidth={width < height && leftCollapsed ? "0" : Sider.defaultProps}
           zeroWidthTriggerStyle={{position: "fixed", left: 0, right: "auto", bottom: 0, top: "auto"}}
           style={{
             overflow: "auto",
@@ -43,7 +51,7 @@ const Skeleton = (props) => {
           <Header className="site-layout-background" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
             <div>
               <Typography>
-                <Title level={window.innerWidth > 480 ? 2 : 4} style={{ margin: 0, textAlign: "center" }}>
+                <Title level={width > 480 ? 2 : 4} style={{ margin: 0, textAlign: "center" }}>
                   Learn Chinese Characters
                 </Title>
               </Typography>

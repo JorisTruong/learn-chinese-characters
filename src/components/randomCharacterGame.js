@@ -28,6 +28,8 @@ const { Countdown } = Statistic
 const { Title, Paragraph } = Typography
 
 var hanzi = null
+var width = null
+var height = null
 var _totalCorrectStrokes = 0
 var _totalMistakesStrokes = 0
 var _totalCorrectChar = 0
@@ -36,6 +38,8 @@ var _precision = 0
 const RandomGame = (props) => {
   const divRef = useRef()
   useEffect(() => {
+    width = window.innerWidth
+    height = window.innerHeight
     if (hanzi == null) {
       hanzi = new HanziWriter(divRef.current, {
         width: 200,
@@ -134,19 +138,19 @@ const RandomGame = (props) => {
   }
   
   const cellSizeAndPositionGetter = ({ index }) => {
-    if (window.innerWidth > window.innerHeight) {
+    if (width > height) {
       return {
-        height: window.innerHeight * 0.08,
-        width: window.innerWidth * 0.08,
-        x: (window.innerWidth * 0.1 - 6) * (index % 8),
-        y: window.innerHeight * 0.1 * Math.floor(index / 8)
+        height: height * 0.08,
+        width: width * 0.08,
+        x: (width * 0.1 - 6) * (index % 8),
+        y: height * 0.1 * Math.floor(index / 8)
       }
     } else {
       return {
-        height: window.innerHeight * 0.1,
-        width: window.innerWidth * 0.1,
-        x: (window.innerWidth * 0.13 - 6) * (index % 6),
-        y: window.innerHeight * 0.13 * Math.floor(index / 6)
+        height: height * 0.1,
+        width: width * 0.1,
+        x: (width * 0.13 - 6) * (index % 6),
+        y: height * 0.13 * Math.floor(index / 6)
       }
     }
   }
@@ -204,9 +208,9 @@ const RandomGame = (props) => {
         </Col>
       </Row>
       <AutoComplete
-        dropdownMatchSelectWidth={window.innerWidth < window.innerHeight ? "75vw" : "20vw"}
+        dropdownMatchSelectWidth={width < height ? "75vw" : "20vw"}
         style={{
-            width: window.innerWidth < window.innerHeight ? "75vw" : "20vw",
+            width: width < height ? "75vw" : "20vw",
         }}
         options={suggestions}
         onSearch={handleSearch}
@@ -214,14 +218,14 @@ const RandomGame = (props) => {
         onChange={(value) => setSearchValue(value)}
         onSelect={(value) => {setSearchValue(""); setInputString(inputString.concat(value))}}
       >
-        <Search placeholder="Search a Chinese Character" enterButton={"OK"} style={{ width: window.innerWidth < window.innerHeight ? "75vw" : "20vw" }} />
+        <Search placeholder="Search a Chinese Character" enterButton={"OK"} style={{ width: width < height ? "75vw" : "20vw" }} />
       </AutoComplete>
       <Row gutter={16} style={{ padding: 15 }}>
         <Col lg={{ span: 4, offset: 10 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }}>
           <Button type="primary" onClick={() => setIsModalVisible(true)}>Browse all characters</Button>
         </Col>
       </Row>
-      <Modal title="All Chinese characters" visible={isModalVisible} footer={null} onCancel={() => setIsModalVisible(false)} width={window.innerWidth * 0.8} bodyStyle={{ height: window.innerHeight * 0.5, overflow: "auto" }}>
+      <Modal title="All Chinese characters" visible={isModalVisible} footer={null} onCancel={() => setIsModalVisible(false)} width={width * 0.8} bodyStyle={{ height: height * 0.5, overflow: "auto" }}>
         <AutoSizer>
           {({ height, width }) => (
             <Collection
@@ -236,7 +240,7 @@ const RandomGame = (props) => {
       </Modal>
         {
           inputString.split("").map((char, i) => {
-            var rowSize = window.innerWidth < 576 ? 4 : window.innerWidth <= 768 ? 6 : 16
+            var rowSize = width < 576 ? 4 : width <= 768 ? 6 : 16
             return i%rowSize === 0 ? inputString.split("").slice(i, i+rowSize) : null;
           }).filter(function(e) { return e }).map((row) => {
             return(

@@ -14,12 +14,16 @@ const { Title, Paragraph } = Typography
 const { Countdown } = Statistic
 
 var hanzi = null
+var width = null
+var height = null
 var _textPosition = 0
 var _strokeProgress = 0
 
 const RaceGame = () => {  
   const divRef = useRef()
   useEffect(() => {
+    width = window.innerWidth
+    height = window.innerHeight
     if (hanzi == null) {
       hanzi = new HanziWriter(divRef.current, {
         width: 200,
@@ -132,7 +136,7 @@ const RaceGame = () => {
           </Typography>
         </Col>
       </Row>
-      <TextArea placeholder="Text to race" style={{ width: window.innerWidth < window.innerHeight ? "75vw" : "50vw" }} rows={4} value={inputString} onChange={(value) => {setInputString(value.target.value); setFilteredInputString(value.target.value.split("").filter(char => /\p{Script=Han}/u.test(char)).join(""))}}/>
+      <TextArea placeholder="Text to race" style={{ width: width < height ? "75vw" : "50vw" }} rows={4} value={inputString} onChange={(value) => {setInputString(value.target.value); setFilteredInputString(value.target.value.split("").filter(char => /\p{Script=Han}/u.test(char)).join(""))}}/>
       <div style={{ padding: 10 }}>
         <Row gutter={16}>
           <Col lg={{ span: 4, offset: 10 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }}>
