@@ -207,19 +207,20 @@ const RandomGame = (props) => {
           </Typography>
         </Col>
       </Row>
-      <AutoComplete
-        dropdownMatchSelectWidth={width < height ? "75vw" : "20vw"}
-        style={{
-            width: width < height ? "75vw" : "20vw",
-        }}
-        options={suggestions}
-        onSearch={handleSearch}
-        value={searchValue}
-        onChange={(value) => setSearchValue(value)}
-        onSelect={(value) => {setSearchValue(""); setInputString(inputString.concat(value))}}
-      >
-        <Search placeholder="Search a Chinese Character" enterButton={"OK"} style={{ width: width < height ? "75vw" : "20vw" }} />
-      </AutoComplete>
+      <Row gutter={16} style={{ padding: 15 }}>
+        <Col lg={{ span: 4, offset: 10 }} md={{ span: 12, offset: 6 }} xs={{ span: 24 }}>
+          <AutoComplete
+            dropdownMatchSelectWidth={"100%"}
+            options={suggestions}
+            onSearch={handleSearch}
+            value={searchValue}
+            onChange={(value) => setSearchValue(value)}
+            onSelect={(value) => {setSearchValue(""); setInputString(inputString.concat(value))}}
+          >
+            <Search placeholder="Search a Chinese Character" enterButton={"OK"} style={{ width: "100%" }} />
+          </AutoComplete>
+        </Col>
+      </Row>
       <Row gutter={16} style={{ padding: 15 }}>
         <Col lg={{ span: 4, offset: 10 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }}>
           <Button type="primary" onClick={() => setIsModalVisible(true)}>Browse all characters</Button>
