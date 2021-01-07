@@ -16,9 +16,25 @@ const Skeleton = (props) => {
   useEffect(() => {
     width = window.innerWidth
     height = window.innerHeight
+    if (width >= height) {
+      setLeftCollapse(false)
+      setCollapsedWidth(Sider.defaultProps)
+    }
   }, [])
 
-  const [leftCollapsed, setLeftCollapse] = useState(width < height ? true : false)
+  const [leftCollapsed, setLeftCollapse] = useState(true)
+  const [collapsedWidth, setCollapsedWidth] = useState("0")
+
+  function onCollapseSider() {
+    if (width < height) {
+      if (leftCollapsed) {
+        setCollapsedWidth(Sider.defaultProps)
+      } else {
+        setCollapsedWidth("0")
+      }
+    }
+    setLeftCollapse(!leftCollapsed)
+  }
 
   return (
     <div>
@@ -26,8 +42,8 @@ const Skeleton = (props) => {
       </Helmet>
       <Layout style={{ minHeight: "100vh" }}>
         <Sider
-          collapsible collapsed={leftCollapsed} onCollapse={() => setLeftCollapse(!leftCollapsed)}
-          collapsedWidth={width < height && leftCollapsed ? "0" : Sider.defaultProps}
+          collapsible collapsed={leftCollapsed} onCollapse={onCollapseSider}
+          collapsedWidth={collapsedWidth}
           zeroWidthTriggerStyle={{position: "fixed", left: 0, right: "auto", bottom: 0, top: "auto"}}
           style={{
             overflow: "auto",
