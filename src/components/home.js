@@ -29,10 +29,13 @@ var width = null
 var height = null
 
 const Home = () => {
-  const divRef = useRef()
   useEffect(() => {
     width = window.innerWidth
     height = window.innerHeight
+  })
+
+  const divRef = useRef()
+  useEffect(() => {
     if (hanzi == null) {
       hanzi = HanziWriter.create(divRef.current, "學", {
         width: 200,
@@ -205,17 +208,19 @@ const Home = () => {
           </Typography>
         </Col>
       </Row>
-      <AutoComplete
-        dropdownMatchSelectWidth={width < height ? "75vw" : "20vw"}
-        style={{
-            width: width < height ? "75vw" : "20vw",
-        }}
-        options={suggestions}
-        onSearch={handleSearch}
-        onSelect={(value) => setHanzi(value)}
-      >
-        <Search placeholder="Search a Chinese Character" enterButton={"OK"} style={{ width: width < height ? "75vw" : "20vw" }} onSearch={(value) => setHanzi(value, null)} />
-      </AutoComplete>
+      <Row gutter={16} style={{ padding: 15 }}>
+        <Col lg={{ span: 4, offset: 10 }} md={{ span: 12, offset: 6 }} xs={{ span: 24 }}>
+          <AutoComplete
+            dropdownMatchSelectWidth={"100%"}
+            style={{ width: "100%" }}
+            options={suggestions}
+            onSearch={handleSearch}
+            onSelect={(value) => setHanzi(value)}
+          >
+            <Search placeholder="Search a Chinese Character" enterButton={"OK"} style={{ width: "100%" }} onSearch={(value) => setHanzi(value, null)} />
+          </AutoComplete>
+        </Col>
+      </Row>
       <Row gutter={16} style={{ padding: 15 }}>
         <Col lg={{ span: 4, offset: 10 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }}>
           <Button type="primary" onClick={() => setIsModalVisible(true)}>Browse all characters</Button>
