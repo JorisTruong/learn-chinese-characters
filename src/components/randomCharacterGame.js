@@ -208,9 +208,10 @@ const RandomGame = (props) => {
         </Col>
       </Row>
       <Row gutter={16} style={{ padding: 15 }}>
-        <Col lg={{ span: 4, offset: 10 }} md={{ span: 12, offset: 6 }} xs={{ span: 24 }}>
+        <Col lg={{ span: 8, offset: 8 }} md={{ span: 12, offset: 6 }} xs={{ span: 24 }}>
           <AutoComplete
             dropdownMatchSelectWidth={"100%"}
+            style={{ width: "100%" }}
             options={suggestions}
             onSearch={handleSearch}
             value={searchValue}
