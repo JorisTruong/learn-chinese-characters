@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react"
-import { Typography, Statistic, Card, Button, Input, AutoComplete, Modal, Tag, Row, Col } from "antd"
+import { Typography, Statistic, Card, Button, Input, AutoComplete, Modal, Tag, Checkbox, Row, Col } from "antd"
 import { connect } from "react-redux"
 import { AutoSizer, Collection } from "react-virtualized"
 
@@ -64,6 +64,26 @@ const RandomGame = (props) => {
   const [deadline, setDeadline] = useState(Date.now())
   const [finished, setFinished] = useState(true)
   const [ready, setReady] = useState(null)
+  const [traditional, setTraditional] = useState(true)
+  const [simplified, setSimplified] = useState(true)
+
+  const checkTraditional = () => {
+    if (simplified && traditional) {
+      setTraditional(false)
+    }
+    if (simplified && !traditional) {
+      setTraditional(true)
+    }
+  }
+
+  const checkSimplified = () => {
+    if (simplified && traditional) {
+      setSimplified(false)
+    }
+    if (!simplified && traditional) {
+      setSimplified(true)
+    }
+  }
 
   const handleSearch = (value) => {
     setSuggestions(value ? searchResult(value) : [])
@@ -161,9 +181,33 @@ const RandomGame = (props) => {
     return Math.floor(Math.random() * (max - min)) + min;
   }
 
+  const getRandomCharacter = () => {
+    if (traditional && !simplified) {
+      var traditionalCharacter = hanziData[getRandomInt(0, 9574)]
+      var isTraditional = traditionalCharacter.is_traditional
+      while (isTraditional === 0) {
+        traditionalCharacter = hanziData[getRandomInt(0, 9574)]
+        isTraditional = traditionalCharacter.is_traditional
+      }
+      return traditionalCharacter.character
+    }
+    if (!traditional && simplified) {
+      var simplifiedCharacter = hanziData[getRandomInt(0, 9574)]
+      var isSimplified = simplifiedCharacter.is_simplified
+      while (isSimplified === 0) {
+        simplifiedCharacter = hanziData[getRandomInt(0, 9574)]
+        isSimplified = simplifiedCharacter.is_simplified
+      }
+      return simplifiedCharacter.character
+    }
+    if (traditional && simplified) {
+      return hanziData[getRandomInt(0, 9574)].character
+    }
+  }
+
   const setQuiz = () => {
     if (inputString.length === 0) {
-      hanzi.setCharacter(hanziData[getRandomInt(0, 9574)].character)
+      hanzi.setCharacter(getRandomCharacter())
     } else {
       hanzi.setCharacter(inputString[getRandomInt(0, inputString.length)])
     }
@@ -225,6 +269,14 @@ const RandomGame = (props) => {
       <Row gutter={16} style={{ padding: 15 }}>
         <Col lg={{ span: 4, offset: 10 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }}>
           <Button type="primary" onClick={() => setIsModalVisible(true)}>Browse all characters</Button>
+        </Col>
+      </Row>
+      <Row gutter={16} style={{ padding: 15, textAlign: "center" }}>
+        <Col lg={{ span: 4, offset: 8 }} md={{ span: 12 }} xs={{ span: 24 }}>
+          <Checkbox checked={traditional} onChange={checkTraditional}>Traditional characters</Checkbox>
+        </Col>
+        <Col lg={{ span: 4 }} md={{ span: 12 }} xs={{ span: 24 }}>
+          <Checkbox checked={simplified} onChange={checkSimplified}>Simplified characters</Checkbox>
         </Col>
       </Row>
       <Modal title="All Chinese characters" visible={isModalVisible} footer={null} onCancel={() => setIsModalVisible(false)} width={width * 0.8} bodyStyle={{ height: height * 0.5, overflow: "auto" }}>
