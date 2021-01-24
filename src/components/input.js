@@ -1,12 +1,15 @@
 import React, { useState, useRef, useEffect } from "react"
-import { Typography, Button, Input, Row, Col } from "antd"
+import { Typography, Button, Input, Select, Row, Col } from "antd"
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons"
 
 
 const HanziWriter = require("hanzi-writer")
 
+const textsData = require("../resources/texts.json")
+
 const { TextArea } = Input
 const { Title, Paragraph } = Typography
+const { Option } = Select
 
 var hanzi = null
 var _textPosition = null
@@ -36,6 +39,8 @@ const InputText = () => {
   const [filteredInputString, setFilteredInputString] = useState("")
   const [savedInput, setSavedInput] = useState("")
   const [textPosition, setTextPosition] = useState(null)
+  const [hskLevel, setHSKLevel] = useState(1)
+  const [writingSystem, setWritingSystem] = useState("traditional")
 
   const writerOptions = {
     onCorrectStroke: function(strokeData) {
@@ -73,6 +78,19 @@ const InputText = () => {
     hanzi.quiz(writerOptions)
   }
 
+  const getRandomInt = (min, max) => {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min)) + min;
+  }
+
+  const pickRandomText = () => {
+    var texts = textsData[hskLevel-1]["texts"]
+    var pickedText = texts[getRandomInt(0, texts.length)]
+    setInputString(pickedText[writingSystem])
+    setFilteredInputString(pickedText[writingSystem].split("").filter(char => /\p{Script=Han}/u.test(char)).join(""))
+  }
+
   return (
     <div className="site-layout-background" style={{ padding: 24, textAlign: "center" }}>
       <Row style={{ paddingBottom: 25 }}>
@@ -92,10 +110,33 @@ const InputText = () => {
           <TextArea placeholder="Type your text" style={{ width: "100%" }} rows={4} value={inputString} onChange={(value) => {setInputString(value.target.value); setFilteredInputString(value.target.value.split("").filter(char => /\p{Script=Han}/u.test(char)).join(""))}}/>
         </Col>
       </Row>
-      <div style={{ padding: 10 }}>
+      <div style={{ padding: 10, paddingTop: 25, paddingBottom: 45 }}>
         <Row gutter={16}>
           <Col lg={{ span: 4, offset: 10 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }}>
             <Button type="primary" onClick={updateInput} style={{ width: "100%" }}>Update Text</Button>
+          </Col>
+        </Row>
+      </div>
+      <div style={{ padding: 10 }}>
+        <Row gutter={[16, 16]}>
+          <Col lg={{ span: 4, offset: 6 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }}>
+            <Button type="primary" onClick={pickRandomText} style={{ width: "100%" }}>Pick a random text</Button>
+          </Col>
+          <Col lg={{ span: 4, offset: 0 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }}>
+            <Select value={hskLevel} onChange={(value) => setHSKLevel(value)} style={{ width: "100%" }}>
+              <Option value={1}>HSK Level 1</Option>
+              <Option value={2}>HSK Level 2</Option>
+              <Option value={3}>HSK Level 3</Option>
+              <Option value={4}>HSK Level 4</Option>
+              <Option value={5}>HSK Level 5</Option>
+              <Option value={6}>HSK Level 6</Option>
+            </Select>
+          </Col>
+          <Col lg={{ span: 4, offset: 0 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }}>
+            <Select value={writingSystem} onChange={(value) => setWritingSystem(value)} style={{ width: "100%" }}>
+              <Option value={"traditional"}>Traditional</Option>
+              <Option value={"simplified"}>Simplified</Option>
+            </Select>
           </Col>
         </Row>
       </div>

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react"
-import { Typography, Card, Statistic, Button, Input, Progress, Row, Col } from "antd"
+import { Typography, Card, Statistic, Button, Input, Progress, Select, Row, Col } from "antd"
 
 import useInterval from "./hooks/useInterval"
 
@@ -8,10 +8,12 @@ const jsonQuery = require("json-query")
 
 const hanziData = require("../resources/hanzi.json")
 const hanziDataQuery = { "characters": hanziData }
+const textsData = require("../resources/texts.json")
 
 const { TextArea } = Input
 const { Title, Paragraph } = Typography
 const { Countdown } = Statistic
+const { Option } = Select
 
 var hanzi = null
 var _textPosition = 0
@@ -45,6 +47,8 @@ const RaceGame = () => {
   const [totalStrokes, setTotalStrokes] = useState(0)
   const [strokeProgress, setStrokeProgress] = useState(0)
   const [ready, setReady] = useState(null)
+  const [hskLevel, setHSKLevel] = useState(1)
+  const [writingSystem, setWritingSystem] = useState("traditional")
 
   useInterval(
     () => {
@@ -54,7 +58,7 @@ const RaceGame = () => {
       setPrevTime(Date.now())
       setTimeInMilliseconds(newMilliTime)
     },
-    isTimerActive ? 10 : null
+    isTimerActive ? 21 : null
   );
 
   const updateInput = () => {
@@ -118,6 +122,19 @@ const RaceGame = () => {
     })
   }
 
+  const getRandomInt = (min, max) => {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min)) + min;
+  }
+
+  const pickRandomText = () => {
+    var texts = textsData[hskLevel-1]["texts"]
+    var pickedText = texts[getRandomInt(0, texts.length)]
+    setInputString(pickedText[writingSystem])
+    setFilteredInputString(pickedText[writingSystem].split("").filter(char => /\p{Script=Han}/u.test(char)).join(""))
+  }
+
   return (
     <div className="site-layout-background" style={{ padding: 24, textAlign: "center" }}>
       <Row style={{ paddingBottom: 25 }}>
@@ -127,7 +144,7 @@ const RaceGame = () => {
               Stroke Racer
             </Title>
             <Paragraph style={{ textAlign: "justify" }}>
-              In Stroke Racer, you will test your <i>handwriting</i> (digital) speed. You can generate a text and try to finish writing it down as fast as you can. You can also input your own text. Let"s see who is the fastest Chinese character writer!
+              In Stroke Racer, you will test your <i>handwriting</i> (digital) speed. You can generate a text and try to finish writing it down as fast as you can. You can also input your own text. Let's see who is the fastest Chinese character writer!
             </Paragraph>
           </Typography>
         </Col>
@@ -137,10 +154,26 @@ const RaceGame = () => {
           <TextArea placeholder="Text to race" style={{ width: "100%" }} rows={4} value={inputString} onChange={(value) => {setInputString(value.target.value); setFilteredInputString(value.target.value.split("").filter(char => /\p{Script=Han}/u.test(char)).join(""))}}/>
         </Col>
       </Row>
-      <div style={{ padding: 10 }}>
-        <Row gutter={16}>
-          <Col lg={{ span: 4, offset: 10 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }}>
-            <Button type="primary" onClick={() => {_strokeProgress = 0; setStrokeProgress(0); updateInput(); resetTimer()}} style={{ width: "100%" }}>Update Text</Button>
+      <div style={{ padding: 10, paddingTop: 45 }}>
+        <Row gutter={[16, 16]}>
+          <Col lg={{ span: 4, offset: 6 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }}>
+            <Button type="primary" onClick={pickRandomText} style={{ width: "100%" }}>Pick a random text</Button>
+          </Col>
+          <Col lg={{ span: 4, offset: 0 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }}>
+            <Select value={hskLevel} onChange={(value) => setHSKLevel(value)} style={{ width: "100%" }}>
+              <Option value={1}>HSK Level 1</Option>
+              <Option value={2}>HSK Level 2</Option>
+              <Option value={3}>HSK Level 3</Option>
+              <Option value={4}>HSK Level 4</Option>
+              <Option value={5}>HSK Level 5</Option>
+              <Option value={6}>HSK Level 6</Option>
+            </Select>
+          </Col>
+          <Col lg={{ span: 4, offset: 0 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }}>
+            <Select value={writingSystem} onChange={(value) => setWritingSystem(value)} style={{ width: "100%" }}>
+              <Option value={"traditional"}>Traditional</Option>
+              <Option value={"simplified"}>Simplified</Option>
+            </Select>
           </Col>
         </Row>
       </div>
@@ -160,7 +193,7 @@ const RaceGame = () => {
       <div style={{ padding: 10 }}>
         <Row gutter={16}>
           <Col lg={{ span: 4, offset: 10 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }}>
-            <Progress percent={100 * strokeProgress / totalStrokes} showInfo={false} />
+            <Progress percent={totalStrokes === 0 ? 0 : parseFloat(100 * strokeProgress / totalStrokes).toFixed(2)} showInfo={true} trailColor={"#DDD"} />
           </Col>
         </Row>
       </div>
@@ -177,9 +210,16 @@ const RaceGame = () => {
             </div>
           </Col>
           <Col lg={{ span: 4, offset: 10 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }}>
-            <Button type="primary" disabled={isTimerActive} onClick={() => { hanzi.setCharacter(inputString[0]); _textPosition = 0; _strokeProgress = 0; setStrokeProgress(0); setReady(Date.now() + 1000 * 4); resetTimer() }} style={{ width: "100%" }}>Go</Button>
+            <Button type="primary" disabled={isTimerActive} onClick={() => { hanzi.setCharacter(filteredInputString[0]); _textPosition = 0; _strokeProgress = 0; setStrokeProgress(0); setReady(Date.now() + 1000 * 4); resetTimer() }} style={{ width: "100%" }}>Go</Button>
           </Col>
         </Row>
+        <div style={{ padding: 10, paddingTop: 25, paddingBottom: 45 }}>
+          <Row gutter={16}>
+            <Col lg={{ span: 4, offset: 10 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }}>
+              <Button type="primary" onClick={() => {_strokeProgress = 0; setStrokeProgress(0); updateInput(); resetTimer()}} style={{ width: "100%" }}>Reset</Button>
+            </Col>
+          </Row>
+        </div>
         <Row gutter={16}>
           <Col lg={{ span: 4, offset: 10 }} md={{ span: 12, offset: 6 }} xs={{ span: 20, offset: 2 }} style={{ paddingTop: 25 }}>
             <Card>
